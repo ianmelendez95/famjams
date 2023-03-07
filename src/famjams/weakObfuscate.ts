@@ -8,14 +8,16 @@ const IV = new Uint8Array([78,153,54,155,118,170,221,216,70,154,222,247])
  * The salt AND the IV are available in the source.
  * This is just to avoid low-effort swiping of application information.
  */
-export async function obfuscate(password: string, message: string): Promise<ArrayBuffer> {
+export async function obfuscate(password: string, message: string): Promise<string> {
     const key: CryptoKey = await getPasswordKey(password)
 
-    return window.crypto.subtle.encrypt(
+    const encrypted = await window.crypto.subtle.encrypt(
         { name: "AES-GCM", iv: IV },
         key,
         new TextEncoder().encode(message)
     )
+
+    return arrayToHexString(new Uint8Array(encrypted))
 }
 
 /**
@@ -23,14 +25,21 @@ export async function obfuscate(password: string, message: string): Promise<Arra
  * The salt AND the IV are available in the source.
  * This is just to avoid low-effort swiping of application information.
  */
-export async function deObfuscate(password: string, message: string): Promise<ArrayBuffer> {
+export async function deObfuscate(password: string, message: string): Promise<string> {
     const key: CryptoKey = await getPasswordKey(password)
 
-    return window.crypto.subtle.encrypt(
-        { name: "AES-GCM", iv: IV },
-        key,
-        new TextEncoder().encode(message)
-    )
+    try {
+        const decrypted = await window.crypto.subtle.decrypt(
+            { name: "AES-GCM", iv: IV },
+            key,
+            hexStringToArray(message)
+        )
+
+        return new TextDecoder().decode(decrypted)
+    } catch (e) {
+        console.error("Error: ", e)
+        throw e
+    }
 }
 
 async function getPasswordKey(password: string): Promise<CryptoKey> {
@@ -57,4 +66,25 @@ async function getPasswordKeyMaterial(password: string): Promise<CryptoKey> {
         false,
         ["deriveBits", "deriveKey"]
     )
+}
+
+function arrayToHexString(array: Uint8Array): string {
+    let res = ''
+    for (const n of array) {
+        const encoded = n.toString(16)
+        if (encoded.length < 2) {
+            res += '0' + encoded
+        } else {
+            res += encoded
+        }
+    }
+    return res
+}
+
+function hexStringToArray(input: string): Uint8Array {
+    const array: Uint8Array = new Uint8Array(input.length / 2)
+    for (let i = 0; i < input.length; i = i + 2) {
+        array[i / 2] = parseInt(input.slice(i, i + 2), 16)
+    }
+    return array
 }
