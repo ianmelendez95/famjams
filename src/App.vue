@@ -11,15 +11,30 @@ function submit() {
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div id="app">
+    <h1>Hello App!</h1>
+    <p>
+      <!-- use the router-link component for navigation. -->
+      <!-- specify the link by passing the `to` prop. -->
+      <!-- `<router-link>` will render an `<a>` tag with the correct `href` attribute -->
+      <router-link to="/">Go to Home</router-link>
+      <router-link to="/about">Go to About</router-link>
+    </p>
+    <!-- route outlet -->
+    <!-- component matched by the route will render here -->
+    <div style="border: solid red 1px">
+      <router-view></router-view>
+    </div>
+  </div>
+<!--  <header>-->
+<!--    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />-->
 
-    <input id="password" type="text" name="password"/>
-    <button @click="submit">Submit</button>
-<!--    <div class="wrapper">-->
-<!--      <HelloWorld :msg="`You did it ${name} !`" />-->
-<!--    </div>-->
-  </header>
+<!--    <input id="password" type="text" name="password"/>-->
+<!--    <button @click="submit">Submit</button>-->
+<!--&lt;!&ndash;    <div class="wrapper">&ndash;&gt;-->
+<!--&lt;!&ndash;      <HelloWorld :msg="`You did it ${name} !`" />&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--  </header>-->
 
 <!--  <main>-->
 <!--    <TheWelcome />-->
