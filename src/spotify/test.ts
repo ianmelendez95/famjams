@@ -1,5 +1,5 @@
-import {getAccessToken, redirectToAuthCodeFlow} from "@/spotify/authCodeWithPkce";
-import {fetchUserTracks} from "@/famjams/tracks";
+// import {getAccessToken, redirectToAuthCodeFlow} from "@/spotify/authCodeWithPkce";
+// import {fetchUserTracks} from "@/famjams/tracks";
 
 export async function test(password: string) {
     console.log("Got password: " + password)
@@ -16,7 +16,7 @@ export async function test(password: string) {
 }
 
 async function analyzePlaylist(code: string) {
-    const userTracks: Map<string, Track[]> = await fetchUserTracks(code)
+    // const userTracks: Map<string, Track[]> = await fetchUserTracks(code)
 
-    console.log(userTracks)
+    // console.log(userTracks)
 }
