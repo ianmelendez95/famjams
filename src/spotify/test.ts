@@ -1,7 +1,7 @@
 // import {getAccessToken, redirectToAuthCodeFlow} from "@/spotify/authCodeWithPkce";
 // import {fetchUserTracks} from "@/famjams/tracks";
 
-import {deObfuscate} from "@/famjams/weakObfuscate";
+import {deObfuscate} from "@/famjams/obfuscate";
 import {getAccessToken, redirectToAuthCodeFlow} from "@/spotify/authCodeWithPkce";
 import {fetchUserTracks} from "@/famjams/tracks";
 

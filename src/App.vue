@@ -2,7 +2,6 @@
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
 import { test } from './spotify/test'
-import { obfuscate } from "@/famjams/weakObfuscate";
 
 function submit() {
   const passwordField: HTMLInputElement = document.getElementById("password") as HTMLInputElement

@@ -6,7 +6,7 @@ const IV = new Uint8Array([78,153,54,155,118,170,221,216,70,154,222,247])
 /**
  * 'Obfuscate' because it can hardly be called encryption.
  * The salt AND the IV are available in the source.
- * This is just to avoid low-effort swiping of application information.
+ * This is just to have some defence for low-effort swiping of application information from source.
  */
 export async function obfuscate(password: string, message: string): Promise<string> {
     const key: CryptoKey = await getPasswordKey(password)
@@ -23,7 +23,7 @@ export async function obfuscate(password: string, message: string): Promise<stri
 /**
  * 'De-Obfuscate' because it can hardly be called encryption.
  * The salt AND the IV are available in the source.
- * This is just to avoid low-effort swiping of application information.
+ * This is just to avoid some defence low-effort swiping of application information from source.
  */
 export async function deObfuscate(password: string, message: string): Promise<string> {
     const key: CryptoKey = await getPasswordKey(password)
