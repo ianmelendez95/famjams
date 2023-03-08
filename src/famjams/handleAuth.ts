@@ -6,7 +6,7 @@ import {getAccessToken, redirectToAuthCodeFlow} from "@/spotify/authCodeWithPkce
 import {fetchUserTracks} from "@/famjams/tracks";
 import {CLIENT_ID, PLAYLIST_ID} from "@/famjams/constants";
 
-export async function test(password: string) {
+export async function handleAuth(password: string) {
     const clientId = await deObfuscate(password, CLIENT_ID)
     const playlistId = await deObfuscate(password, PLAYLIST_ID)
 

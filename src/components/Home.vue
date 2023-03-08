@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {test} from "@/spotify/test";
+import {handleAuth} from "@/famjams/handleAuth";
 
 let password: string
 
 function submit() {
-  test(password)
+  handleAuth(password)
 }
 </script>
 

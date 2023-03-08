@@ -1,15 +1,15 @@
 
-export async function fetchPlaylist(code: string, playlistId: string): Promise<Playlist> {
-  return await asyncSpotify(code, "playlists/" + playlistId)
+export async function fetchPlaylist(accessToken: string, playlistId: string): Promise<Playlist> {
+  return await asyncSpotify(accessToken, "playlists/" + playlistId)
 }
 
-export async function fetchUserProfile(code: string, userId: string): Promise<UserProfile> {
-  return await asyncSpotify(code, "users/" + userId)
+export async function fetchUserProfile(accessToken: string, userId: string): Promise<UserProfile> {
+  return await asyncSpotify(accessToken, "users/" + userId)
 }
 
-async function asyncSpotify<T>(code: string, path: string): Promise<T> {
+async function asyncSpotify<T>(accessToken: string, path: string): Promise<T> {
   const result = await fetch("https://api.spotify.com/v1/" + path, {
-    method: "GET", headers: { Authorization: `Bearer ${code}` }
+    method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
   });
 
   const json = await result.json();
