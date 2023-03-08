@@ -2,7 +2,9 @@
 </script>
 
 <template>
-  <div id="app">
-    <router-view></router-view>
+  <div class="greetings">
+    <h3>
+      Redirecting...
+    </h3>
   </div>
 </template>

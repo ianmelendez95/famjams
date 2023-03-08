@@ -2,16 +2,15 @@ import { createApp } from 'vue'
 import * as VueRouter from 'vue-router'
 import App from './App.vue'
 
-import HelloWorld from "@/components/HelloWorld.vue";
-
 import './assets/main.css'
-import TheWelcome from "@/components/TheWelcome.vue";
+import Home from "@/components/Home.vue";
+import Callback from "@/components/Callback.vue";
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHistory(),
     routes: [
-        { path: '/', component: HelloWorld, props: { msg: 'Ian' } },
-        { path: '/about', component: TheWelcome }
+        { path: '/', component: Home },
+        { path: '/callback', component: Callback }
     ]
 })
 
