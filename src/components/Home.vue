@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import {handleAuth} from "@/famjams/handleAuth";
+import {deObfuscate} from "@/famjams/obfuscate";
+import {CLIENT_ID, PLAYLIST_ID} from "@/famjams/constants";
+import {redirectToAuthCodeFlow} from "@/spotify/authCodeWithPkce";
 
 let password: string
 
-function submit() {
-  handleAuth(password)
+async function submit() {
+  const clientId = await deObfuscate(password, CLIENT_ID)
+  const playlistId = await deObfuscate(password, PLAYLIST_ID)
+
+  localStorage.setItem("clientId", clientId)
+  localStorage.setItem("playlistId", playlistId)
+
+  await redirectToAuthCodeFlow(clientId);
 }
 </script>
 
