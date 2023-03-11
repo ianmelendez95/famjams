@@ -9,10 +9,18 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  DoughnutController,
+  ArcElement,
   BarController
 } from 'chart.js'
 
-ChartJS.register(BarController, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(BarController, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+const RED    = 'rgba(255, 99, 132, 0.5)'
+const BLUE   = 'rgba(54, 162, 235, 0.2)'
+const YELLOW = 'rgba(255, 206, 86, 0.2)'
+const GREEN  = 'rgba(75, 192, 192, 0.2)'
+const ORANGE  = 'rgba(255, 86, 0, 0.2)'
 
 const accessToken = localStorage.getItem("accessToken") as string
 const playlistId = localStorage.getItem("playlistId") as string
@@ -22,24 +30,30 @@ const userTrackCounts: Map<string, number> = await getUsernamesToTrackCount(acce
 let countChart = ref<HTMLCanvasElement | null>(null)
 
 onMounted(() => {
-  const labels = [...userTrackCounts.keys()]
-  const data = [...userTrackCounts.values()]
+  const entries = [...userTrackCounts.entries()].sort((e1, e2) => e2[1] - e1[1])
+
+  const labels = entries.map(e => e[0])
+  const data = entries.map(e => e[1])
 
   new ChartJS(countChart.value as HTMLCanvasElement, {
-    type: 'bar',
+    type: 'doughnut',
     data: {
       labels,
       datasets: [{
         label: '# of tracks',
         data,
-        borderWidth: 1
+        borderWidth: 1,
+        backgroundColor: [
+          RED,
+          BLUE,
+          YELLOW,
+          GREEN,
+          ORANGE
+        ]
       }]
     },
     options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
+      elements: {
       }
     }
   })
