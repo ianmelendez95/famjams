@@ -79,8 +79,7 @@ export function DonutChart(data: DonutChartData[], {
     if (colors === undefined) colors = d3.quantize((t: number) => d3.interpolateGreens(t * 0.4 + 0.4), names.size);
 
     // Construct scales.
-    colors = colors.slice().reverse()
-    const color = d3.scaleOrdinal(names, colors);
+    const color = d3.scaleOrdinal(names, colors.slice().reverse());
 
     // Compute titles.
     if (title === undefined) {
