@@ -75,10 +75,11 @@ export function DonutChart(data: DonutChartData[], {
     names = new d3.InternSet(names) as Set<string>;
 
     // Chose a default color scheme based on cardinality.
-    if (colors === undefined) colors = d3.schemeSpectral[names.size];
-    if (colors === undefined) colors = d3.quantize((t: number) => d3.interpolateSpectral(t * 0.8 + 0.1), names.size);
+    if (colors === undefined) colors = d3.schemeGreens[names.size];
+    if (colors === undefined) colors = d3.quantize((t: number) => d3.interpolateGreens(t * 0.5 + 0.4), names.size);
 
     // Construct scales.
+    colors = colors.slice().reverse()
     const color = d3.scaleOrdinal(names, colors);
 
     // Compute titles.
