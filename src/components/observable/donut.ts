@@ -64,7 +64,7 @@ export function DonutChart(data: DonutChartData[], {
     strokeWidth = 1, // width of stroke separating wedges
     strokeLinejoin = "round", // line join of stroke separating wedges
     padAngle = stroke === "none" ? 1 / outerRadius : 0, // angular separation between wedges
-  }: DonutChartOptions = {}) {
+}: DonutChartOptions = {}): SVGSVGElement {
     // Compute values.
     const N: string[] = d3.map(data, name!);
     const V = d3.map(data, value!);
@@ -83,12 +83,12 @@ export function DonutChart(data: DonutChartData[], {
 
     // Compute titles.
     if (title === undefined) {
-      const formatValue = d3.format(format);
-      title = (i: number | DonutChartData) => `${N[i as number]}\n${formatValue(V[i as number])}`;
+        const formatValue = d3.format(format);
+        title = (i: number | DonutChartData) => `${N[i as number]}\n${formatValue(V[i as number])}`;
     } else {
-      const O: DonutChartData[] = d3.map(data, (d: DonutChartData) => d);
-      const T = title;
-      title = (i: number | DonutChartData) => T(O[i as number], i as number, data);
+        const O: DonutChartData[] = d3.map(data, (d: DonutChartData) => d);
+        const T = title;
+        title = (i: number | DonutChartData) => T(O[i as number], i as number, data);
     }
 
     // Construct arcs.
@@ -97,41 +97,41 @@ export function DonutChart(data: DonutChartData[], {
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
     const svg = d3.create("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [-width / 2, -height / 2, width, height])
+        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
     svg.append("g")
-      .attr("stroke", stroke)
-      .attr("stroke-width", strokeWidth)
-      .attr("stroke-linejoin", strokeLinejoin)
-      .selectAll("path")
-      .data(arcs)
-      .join("path")
-      .attr("fill", (d: PieArcDatum<any>) => color(N[d.data]))
-      .attr("d", arc as any)
-      .append("title")
-      .text((d: PieArcDatum<any>) => title!(d.data));
+        .attr("stroke", stroke)
+        .attr("stroke-width", strokeWidth)
+        .attr("stroke-linejoin", strokeLinejoin)
+        .selectAll("path")
+        .data(arcs)
+        .join("path")
+        .attr("fill", (d: PieArcDatum<any>) => color(N[d.data]))
+        .attr("d", arc as any)
+        .append("title")
+        .text((d: PieArcDatum<any>) => title!(d.data));
 
     svg.append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
-      .attr("text-anchor", "middle")
-      .selectAll("text")
-      .data(arcs)
-      .join("text")
-      .attr("transform", (d: unknown) => `translate(${arcLabel.centroid(d as DefaultArcObject)})`)
-      .selectAll("tspan")
-      .data((d: PieArcDatum<any>) => {
-        const lines = `${title!(d.data)}`.split(/\n/);
-        return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
-      })
-      .join("tspan")
-      .attr("x", 0)
-      .attr("y", (_: string, i: number) => `${i * 1.1}em`)
-      .attr("font-weight", (_: string, i: number) => i ? null : "bold")
-      .text(d => d);
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("text-anchor", "middle")
+        .selectAll("text")
+        .data(arcs)
+        .join("text")
+        .attr("transform", (d: unknown) => `translate(${arcLabel.centroid(d as DefaultArcObject)})`)
+        .selectAll("tspan")
+        .data((d: PieArcDatum<any>) => {
+            const lines = `${title!(d.data)}`.split(/\n/);
+            return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
+        })
+        .join("tspan")
+        .attr("x", 0)
+        .attr("y", (_: string, i: number) => `${i * 1.1}em`)
+        .attr("font-weight", (_: string, i: number) => i ? null : "bold")
+        .text(d => d);
 
     return Object.assign(svg.node() as SVGSVGElement, {scales: {color}});
-  }
+}

@@ -13,8 +13,9 @@ import {
   ArcElement,
   BarController
 } from 'chart.js'
+import {DATA, DonutChart} from "@/components/observable/donut";
 
-ChartJS.register(BarController, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(DoughnutController, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const RED    = 'rgba(255, 99, 132, 0.5)'
 const BLUE   = 'rgba(54, 162, 235, 0.2)'
@@ -28,6 +29,12 @@ const playlistId = localStorage.getItem("playlistId") as string
 const userTrackCounts: Map<string, number> = await getUsernamesToTrackCount(accessToken, playlistId)
 
 let countChart = ref<HTMLCanvasElement | null>(null)
+let d3DonutDiv = ref<HTMLDivElement | null>(null)
+
+const d3DonutSvg = DonutChart(DATA, {
+  name: d => d.name,
+  value: d => d.value,
+})
 
 onMounted(() => {
   const entries = [...userTrackCounts.entries()].sort((e1, e2) => e2[1] - e1[1])
@@ -57,6 +64,8 @@ onMounted(() => {
       }
     }
   })
+
+  d3DonutDiv.value!.appendChild(d3DonutSvg)
 })
 </script>
 
@@ -67,6 +76,7 @@ onMounted(() => {
   <div>
     <canvas id="count-chart" class="count-chart" ref="countChart"></canvas>
   </div>
+  <div ref="d3DonutDiv"></div>
 </template>
 
 <style scoped>
