@@ -100,7 +100,7 @@ export function DonutChart(data: DonutChartData[], {
         .attr("width", width)
         .attr("height", height)
         .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+        .attr("style", "height: auto; height: intrinsic;");
 
     svg.append("g")
         .attr("stroke", stroke)
