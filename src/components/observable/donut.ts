@@ -76,7 +76,7 @@ export function DonutChart(data: DonutChartData[], {
 
     // Chose a default color scheme based on cardinality.
     if (colors === undefined) colors = d3.schemeGreens[names.size];
-    if (colors === undefined) colors = d3.quantize((t: number) => d3.interpolateGreens(t * 0.5 + 0.4), names.size);
+    if (colors === undefined) colors = d3.quantize((t: number) => d3.interpolateGreens(t * 0.4 + 0.4), names.size);
 
     // Construct scales.
     colors = colors.slice().reverse()
