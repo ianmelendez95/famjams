@@ -18,7 +18,7 @@ async function submit() {
 
 <template>
   <div>
-    <input id="password" name="password" v-model="password"/>
+    <input id="password" name="password" v-model="password" v-on:keyup.enter="submit"/>
     <input type="button"
            value="Submit"
            @click="submit"/>
