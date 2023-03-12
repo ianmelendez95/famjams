@@ -60,7 +60,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         .attr("fill", (d: PieArcDatum<number>) => color(N[d.data]))
         .attr("d", arc as any)
         .append("title")
-        .text((d: PieArcDatum<number>) => title!(d.data));
+        .text((d: PieArcDatum<number>) => title(d.data));
 
     svg.append("g")
         .attr("font-family", "sans-serif")
@@ -72,7 +72,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         .attr("transform", (d: PieArcDatum<number>) => `translate(${arcLabel.centroid(d as any)})`)
         .selectAll("tspan")
         .data((d: PieArcDatum<number>) => {
-            const lines = `${title!(d.data)}`.split(/\n/);
+            const lines = `${title(d.data)}`.split(/\n/);
             return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
         })
         .join("tspan")
