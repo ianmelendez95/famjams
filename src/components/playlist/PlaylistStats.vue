@@ -26,9 +26,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-for="[user, count] in userTrackCounts" :key="user">
-    {{ user.display_name }}: {{ count }}
-  </div>
+<!--  <div v-for="[user, count] in userTrackCounts" :key="user">-->
+<!--    {{ user.display_name }}: {{ count }}-->
+<!--  </div>-->
   <div ref="d3DonutDiv"></div>
 </template>
 

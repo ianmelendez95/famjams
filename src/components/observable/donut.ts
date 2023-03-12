@@ -30,7 +30,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     const I = d3.range(N.length);
     const userImageUrls: string[] = d3.map(data, (d) => d.user.images[0].url) // TODO - confirm what happens with no profile picture
 
-    const imageWidth = (outerRadius - innerRadius) * 0.75
+    const imageWidths = calcImageWidths(outerRadius - innerRadius, V)
 
     // Unique the names.
     const names = new d3.InternSet(N) as Set<string>;
@@ -74,9 +74,9 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         .selectAll("text")
         .data(arcs)
         .join("image")
-        .attr("transform", (d: PieArcDatum<number>) => `translate(${imageTransform(imageWidth, arcLabel.centroid(d as any))})`)
-        .attr("width", imageWidth)
-        .attr("height", imageWidth)
+        .attr("transform", (d: PieArcDatum<number>) => `translate(${imageTransform(imageWidths[d.data], arcLabel.centroid(d as any))})`)
+        .attr("width", (d) => imageWidths[d.data])
+        .attr("height", (d) => imageWidths[d.data])
         .attr("style", "clip-path: circle(closest-side)")  // https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/circle
         .attr("xlink:href", (d) => userImageUrls[d.data])
 
@@ -94,6 +94,18 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         // .text(d => d);
 
     return Object.assign(svg.node() as SVGSVGElement, {scales: {color}});
+}
+
+function calcImageWidths(arcWidth: number, values: number[]): number[] {
+    const [min, max] = d3.extent(values) as [number, number]
+    const props = values.map(v => (v - min) / (max - min))  // proportion to min, max
+
+    return props.map(p => arcWidth * ((p * 0.45) + 0.50))
+
+    // theta / 2*pi
+    // const angleRatio = (arc.endAngle - arc.startAngle) / (2 * Math.PI)
+    // const imageProportion = 0.25 + (0.70 * (1 + Math.log(angleRatio)))
+    // return arcWidth * imageProportion
 }
 
 function imageTransform(width: number, [centerX, centerY]: [number, number]): [number, number] {
