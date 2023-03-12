@@ -26,6 +26,9 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     const N: string[] = d3.map(data, (d) => d.user.display_name);
     const V = d3.map(data, (d) => d.value);
     const I = d3.range(N.length);
+    const userImageUrls: string[] = d3.map(data, (d) => d.user.images[0].url) // TODO - confirm what happens with no profile picture
+
+    const imageWidth = (outerRadius - innerRadius) * 0.75
 
     // Unique the names.
     const names = new d3.InternSet(N) as Set<string>;
@@ -68,18 +71,28 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         .attr("text-anchor", "middle")
         .selectAll("text")
         .data(arcs)
-        .join("text")
-        .attr("transform", (d: PieArcDatum<number>) => `translate(${arcLabel.centroid(d as any)})`)
-        .selectAll("tspan")
-        .data((d: PieArcDatum<number>) => {
-            const lines = `${title(d.data)}`.split(/\n/);
-            return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
-        })
-        .join("tspan")
-        .attr("x", 0)
-        .attr("y", (_: string, i: number) => `${i * 1.1}em`)
-        .attr("font-weight", (_: string, i: number) => i ? null : "bold")
-        .text(d => d);
+        .join("image")
+        .attr("transform", (d: PieArcDatum<number>) => `translate(${imageTransform(imageWidth, arcLabel.centroid(d as any))})`)
+        .attr("width", imageWidth)
+        .attr("height", imageWidth)
+        .attr("xlink:href", (d) => userImageUrls[d.data])
+
+        // .join("text")
+        // .attr("transform", (d: PieArcDatum<number>) => `translate(${arcLabel.centroid(d as any)})`)
+        // .selectAll("tspan")
+        // .data((d: PieArcDatum<number>) => {
+        //     const lines = `${title(d.data)}`.split(/\n/);
+        //     return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
+        // })
+        // .join("tspan")
+        // .attr("x", 0)
+        // .attr("y", (_: string, i: number) => `${i * 1.1}em`)
+        // .attr("font-weight", (_: string, i: number) => i ? null : "bold")
+        // .text(d => d);
 
     return Object.assign(svg.node() as SVGSVGElement, {scales: {color}});
+}
+
+function imageTransform(width: number, [centerX, centerY]: [number, number]): [number, number] {
+    return [centerX - (width / 2), centerY - (width / 2)]
 }
