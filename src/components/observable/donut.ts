@@ -22,6 +22,8 @@ export const DATA: DonutChartData[] = [
     { name: "≥85",   value: 5938752 }
 ]
 
+type DonutPieArcDatum = PieArcDatum<number | { valueOf(): number }>
+
 interface DonutChartData {
     name: string,
     value: number
@@ -92,7 +94,7 @@ export function DonutChart(data: DonutChartData[], {
     }
 
     // Construct arcs.
-    const arcs = d3.pie().padAngle(padAngle).sort(null).value((i) => V[i as number])(I);
+    const arcs = d3.pie().padAngle(padAngle).sort(null).value((i) => V[i as number])(I) as PieArcDatum<number>[];
     const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
@@ -109,10 +111,10 @@ export function DonutChart(data: DonutChartData[], {
         .selectAll("path")
         .data(arcs)
         .join("path")
-        .attr("fill", (d: PieArcDatum<any>) => color(N[d.data]))
+        .attr("fill", (d: PieArcDatum<number>) => color(N[d.data]))
         .attr("d", arc as any)
         .append("title")
-        .text((d: PieArcDatum<any>) => title!(d.data));
+        .text((d: PieArcDatum<number>) => title!(d.data));
 
     svg.append("g")
         .attr("font-family", "sans-serif")
@@ -121,9 +123,9 @@ export function DonutChart(data: DonutChartData[], {
         .selectAll("text")
         .data(arcs)
         .join("text")
-        .attr("transform", (d: unknown) => `translate(${arcLabel.centroid(d as DefaultArcObject)})`)
+        .attr("transform", (d: PieArcDatum<number>) => `translate(${arcLabel.centroid(d as any)})`)
         .selectAll("tspan")
-        .data((d: PieArcDatum<any>) => {
+        .data((d: PieArcDatum<number>) => {
             const lines = `${title!(d.data)}`.split(/\n/);
             return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
         })
