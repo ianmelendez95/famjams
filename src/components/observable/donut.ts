@@ -30,8 +30,6 @@ interface DonutChartData {
 }
 
 interface DonutChartOptions {
-    name?: (xs: DonutChartData) => string,  // given d in data, returns the (ordinal) label
-    value?: (xs: DonutChartData) => number, // given d in data, returns the (quantitative) value
     title?: (d: DonutChartData | number, i?: number, data?: DonutChartData[]) => string, // given d in data, returns the title text
     width?: number, // outer width, in pixels
     height?: number, // outer height, in pixels
@@ -39,7 +37,6 @@ interface DonutChartOptions {
     outerRadius?: number, // outer radius of pie, in pixels
     labelRadius?: number, // center radius of labels
     format?: string, // a format specifier for values (in the label)
-    names?: string[] | Set<string>, // array of names (the domain of the color scale)
     colors?: readonly string[], // array of colors for names
     stroke?: string, // stroke separating widths
     strokeWidth?: number, // width of stroke separating wedges
@@ -50,48 +47,38 @@ interface DonutChartOptions {
 // Copyright 2021 Observable, Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/donut-chart
-export function DonutChart(data: DonutChartData[], {
-    name,  // given d in data, returns the (ordinal) label
-    value, // given d in data, returns the (quantitative) value
-    title, // given d in data, returns the title text
-    width = 640, // outer width, in pixels
-    height = 400, // outer height, in pixels
-    innerRadius = Math.min(width, height) / 3, // inner radius of pie, in pixels (non-zero for donut)
-    outerRadius = Math.min(width, height) / 2, // outer radius of pie, in pixels
-    labelRadius = (innerRadius + outerRadius) / 2, // center radius of labels
-    format = ",", // a format specifier for values (in the label)
-    names, // array of names (the domain of the color scale)
-    colors, // array of colors for names
-    stroke = innerRadius > 0 ? "none" : "white", // stroke separating widths
-    strokeWidth = 1, // width of stroke separating wedges
-    strokeLinejoin = "round", // line join of stroke separating wedges
-    padAngle = stroke === "none" ? 1 / outerRadius : 0, // angular separation between wedges
-}: DonutChartOptions = {}): SVGSVGElement {
+export function DonutChart(data: DonutChartData[],
+                           nameFunction: (d: DonutChartData) => string,
+                           valueFunction: (d: DonutChartData) => number): SVGSVGElement {
+    const width = 640 // outer width, in pixels
+    const height = 400 // outer height, in pixels
+    const innerRadius = Math.min(width, height) / 3 // inner radius of pie, in pixels (non-zero for donut)
+    const outerRadius = Math.min(width, height) / 2 // outer radius of pie, in pixels
+    const labelRadius = (innerRadius + outerRadius) / 2 // center radius of labels
+    const format = "," // a format specifier for values (in the label)
+    const stroke = innerRadius > 0 ? "none" : "white" // stroke separating widths
+    const strokeWidth = 1 // width of stroke separating wedges
+    const strokeLinejoin = "round" // line join of stroke separating wedges
+    const padAngle = stroke === "none" ? 1 / outerRadius : 0 // angular separation between wedges
+
     // Compute values.
-    const N: string[] = d3.map(data, name!);
-    const V = d3.map(data, value!);
-    const I = d3.range(N.length).filter((i: number) => !isNaN(V[i]));
+    const N: string[] = d3.map(data, nameFunction);
+    const V = d3.map(data, valueFunction);
+    const I = d3.range(N.length);
 
     // Unique the names.
-    if (names === undefined) names = N;
-    names = new d3.InternSet(names) as Set<string>;
+    const names = new d3.InternSet(N) as Set<string>;
 
     // Chose a default color scheme based on cardinality.
-    if (colors === undefined) colors = d3.schemeGreens[names.size];
-    if (colors === undefined) colors = d3.quantize((t: number) => d3.interpolateGreens(t * 0.4 + 0.4), names.size);
+    const colors = names.size < d3.schemeGreens.length
+        ? d3.schemeGreens[names.size]
+        : d3.quantize((t: number) => d3.interpolateGreens(t * 0.4 + 0.4), names.size)
 
     // Construct scales.
     const color = d3.scaleOrdinal(names, colors.slice().reverse());
 
     // Compute titles.
-    if (title === undefined) {
-        const formatValue = d3.format(format);
-        title = (i: number | DonutChartData) => `${N[i as number]}\n${formatValue(V[i as number])}`;
-    } else {
-        const O: DonutChartData[] = d3.map(data, (d: DonutChartData) => d);
-        const T = title;
-        title = (i: number | DonutChartData) => T(O[i as number], i as number, data);
-    }
+    const title = (i: number | DonutChartData) => `${N[i as number]}\n${d3.format(format)(V[i as number])}`;
 
     // Construct arcs.
     const arcs = d3.pie().padAngle(padAngle).sort(null).value((i) => V[i as number])(I) as PieArcDatum<number>[];
