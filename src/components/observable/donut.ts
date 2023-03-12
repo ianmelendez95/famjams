@@ -1,17 +1,16 @@
 import * as d3 from 'd3'
 import type {PieArcDatum} from "d3";
+import type {UserProfile} from "@/spotify/types";
 
 interface DonutChartData {
-    name: string,
+    user: UserProfile,
     value: number
 }
 
 // Copyright 2021 Observable, Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/donut-chart
-export function DonutChart(data: DonutChartData[],
-                           nameFunction: (d: DonutChartData) => string,
-                           valueFunction: (d: DonutChartData) => number): SVGSVGElement {
+export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     const width = 640 // outer width, in pixels
     const height = 400 // outer height, in pixels
     const innerRadius = Math.min(width, height) / 3 // inner radius of pie, in pixels (non-zero for donut)
@@ -24,8 +23,8 @@ export function DonutChart(data: DonutChartData[],
     const padAngle = stroke === "none" ? 1 / outerRadius : 0 // angular separation between wedges
 
     // Compute values.
-    const N: string[] = d3.map(data, nameFunction);
-    const V = d3.map(data, valueFunction);
+    const N: string[] = d3.map(data, (d) => d.user.display_name);
+    const V = d3.map(data, (d) => d.value);
     const I = d3.range(N.length);
 
     // Unique the names.

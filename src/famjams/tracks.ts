@@ -1,3 +1,4 @@
+import type {Playlist, Track} from "@/spotify/types";
 import {fetchPlaylist} from "@/spotify/api";
 
 export async function fetchUserTracks(accessToken: string, playlistId: string): Promise<Map<string, Track[]>> {

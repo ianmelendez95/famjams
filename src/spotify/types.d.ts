@@ -1,22 +1,24 @@
-interface Image {
-    url: string;
-    height: number;
-    width: number;
-}
-
-interface Playlist {
+export interface Playlist {
     tracks: {
         items: Track[]
     }
 }
 
-interface Track {
+export interface Track {
     added_by: {
         id: '12139552232'
     },
     name: string
 }
 
-interface UserProfile {
-    display_name: string
+export interface UserProfile {
+    id: string,
+    display_name: string,
+    images: Image[]
+}
+
+export interface Image {
+    url: string;
+    height: number;
+    width: number;
 }
