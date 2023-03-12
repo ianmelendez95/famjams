@@ -31,7 +31,12 @@ const userTrackCounts: Map<string, number> = await getUsernamesToTrackCount(acce
 let countChart = ref<HTMLCanvasElement | null>(null)
 let d3DonutDiv = ref<HTMLDivElement | null>(null)
 
-const d3DonutSvg = DonutChart(DATA, d => d.name, d => d.value)
+const chartData = [...userTrackCounts.entries()]
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .sort(([_1, c1], [_2, c2]) => c2 - c1)
+    .map(([uname, count]) => ({ name: uname, value: count }))
+
+const d3DonutSvg = DonutChart(chartData, d => d.name, d => d.value)
 
 onMounted(() => {
   const entries = [...userTrackCounts.entries()].sort((e1, e2) => e2[1] - e1[1])
