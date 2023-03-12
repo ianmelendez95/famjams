@@ -13,7 +13,7 @@ import {
   ArcElement,
   BarController
 } from 'chart.js'
-import {DATA, DonutChart} from "@/components/observable/donut";
+import {DonutChart} from "@/components/observable/donut";
 
 ChartJS.register(DoughnutController, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
