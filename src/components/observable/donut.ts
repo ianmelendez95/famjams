@@ -7,10 +7,12 @@ interface DonutChartData {
     value: number
 }
 
-// Copyright 2021 Observable, Inc.
-// Released under the ISC license.
-// https://observablehq.com/@d3/donut-chart
 export function DonutChart(data: DonutChartData[]): SVGSVGElement {
+    // This is modified and extended work from Observable example.
+    // Copyright 2021 Observable, Inc.
+    // Released under the ISC license.
+    // https://observablehq.com/@d3/donut-chart
+
     const width = 640 // outer width, in pixels
     const height = 400 // outer height, in pixels
     const innerRadius = Math.min(width, height) / 3 // inner radius of pie, in pixels (non-zero for donut)
