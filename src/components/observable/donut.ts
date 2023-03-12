@@ -75,6 +75,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         .attr("transform", (d: PieArcDatum<number>) => `translate(${imageTransform(imageWidth, arcLabel.centroid(d as any))})`)
         .attr("width", imageWidth)
         .attr("height", imageWidth)
+        .attr("style", "clip-path: circle(closest-side)")  // https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/circle
         .attr("xlink:href", (d) => userImageUrls[d.data])
 
         // .join("text")
