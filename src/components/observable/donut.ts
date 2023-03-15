@@ -20,8 +20,6 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     const labelRadius = (innerRadius + outerRadius) / 2 // center radius of labels
     const format = "," // a format specifier for values (in the label)
     const stroke = innerRadius > 0 ? "none" : "white" // stroke separating widths
-    const strokeWidth = 1 // width of stroke separating wedges
-    const strokeLinejoin = "round" // line join of stroke separating wedges
     const padAngle = stroke === "none" ? 1 / outerRadius : 0 // angular separation between wedges
 
     // Compute values.
@@ -56,9 +54,6 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         .attr("style", "height: auto; height: intrinsic;");
 
     svg.append("g")
-        .attr("stroke", stroke)
-        .attr("stroke-width", strokeWidth)
-        .attr("stroke-linejoin", strokeLinejoin)
         .selectAll("path")
         .data(arcs)
         .join("path")
