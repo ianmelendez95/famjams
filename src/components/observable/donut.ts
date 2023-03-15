@@ -33,8 +33,6 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
 
     // Chose a default color scheme based on cardinality.
     const colors = d3.quantize((t: number) => d3.interpolateGreens(t * 0.6 + 0.2), names.size)
-
-    // Construct scales.
     const color = d3.scaleOrdinal(names, colors.slice().reverse());
 
     // Construct arcs.
