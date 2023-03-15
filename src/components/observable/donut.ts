@@ -18,7 +18,6 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     const innerRadius = Math.min(width, height) / 3 // inner radius of pie, in pixels (non-zero for donut)
     const outerRadius = Math.min(width, height) / 2 // outer radius of pie, in pixels
     const labelRadius = (innerRadius + outerRadius) / 2 // center radius of labels
-    const format = "," // a format specifier for values (in the label)
     const padAngle = 1 / outerRadius // angular separation between wedges
 
     // Compute values.
@@ -38,9 +37,6 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     // Construct scales.
     const color = d3.scaleOrdinal(names, colors.slice().reverse());
 
-    // Compute titles.
-    const title = (i: number | DonutChartData) => `${N[i as number]}\n${d3.format(format)(V[i as number])}`;
-
     // Construct arcs.
     const arcs = d3.pie().padAngle(padAngle).sort(null).value((i) => V[i as number])(I) as PieArcDatum<number>[];
     const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
@@ -59,7 +55,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
         .attr("fill", (d: PieArcDatum<number>) => color(N[d.data]))
         .attr("d", arc as any)
         .append("title")
-        .text((d: PieArcDatum<number>) => title(d.data));
+        .text((d: PieArcDatum<number>) => N[d.data]);
 
     svg.append("g")
         .attr("font-family", "sans-serif")
