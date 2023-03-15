@@ -19,8 +19,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     const outerRadius = Math.min(width, height) / 2 // outer radius of pie, in pixels
     const labelRadius = (innerRadius + outerRadius) / 2 // center radius of labels
     const format = "," // a format specifier for values (in the label)
-    const stroke = innerRadius > 0 ? "none" : "white" // stroke separating widths
-    const padAngle = stroke === "none" ? 1 / outerRadius : 0 // angular separation between wedges
+    const padAngle = 1 / outerRadius // angular separation between wedges
 
     // Compute values.
     const N: string[] = d3.map(data, (d) => d.user.display_name);
