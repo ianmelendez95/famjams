@@ -1,7 +1,8 @@
 export interface UserPlaylists {
     items: UserPlaylist[],
-    next: string,
-    offset: number
+    next: string | null,
+    offset: number,
+    total: number
 }
 
 /**
@@ -9,6 +10,7 @@ export interface UserPlaylists {
  */
 export interface UserPlaylist {
     id: string,
+    collaborative: boolean,
     images: Image[],
     name: string,
     tracks: {
