@@ -9,7 +9,7 @@ import {useRouter} from "vue-router";
 
 const router = useRouter()
 
-const accessToken = sessionStorage.getItem("accessToken")
+const accessToken = sessionStorage.getItem("accessToken") as string
 if (accessToken == null) {
   router.push("/")
 }
