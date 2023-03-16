@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import type {PieArcDatum} from "d3";
+import type {Arc, DefaultArcObject, PieArcDatum} from "d3";
 import type {UserProfile} from "@/spotify/types";
 
 interface DonutChartData {
@@ -18,7 +18,8 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     const innerRadius = Math.min(width, height) / 3 // inner radius of pie, in pixels (non-zero for donut)
     const outerRadius = Math.min(width, height) / 2 // outer radius of pie, in pixels
     const labelRadius = (innerRadius + outerRadius) / 2 // center radius of labels
-    const padAngle = 1 / outerRadius // angular separation between wedges
+
+    const padAngle = 6 / outerRadius // angular separation between wedges [1 ~= tan(1/outerRadius) * outerRadius, padAngle ~= padThickness / outerRadius]
 
     // Compute values.
     const N: string[] = d3.map(data, (d) => d.user.display_name);
@@ -37,7 +38,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
 
     // Construct arcs.
     const arcs = d3.pie().padAngle(padAngle).sort(null).value((i) => V[i as number])(I) as PieArcDatum<number>[];
-    const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+    const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius).cornerRadius(5) as Arc<any, DefaultArcObject>;
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
     const svg = d3.create("svg")
