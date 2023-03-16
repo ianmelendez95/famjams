@@ -1,13 +1,15 @@
 // source: https://github.com/spotify/web-api-examples/blob/master/get_user_profile/src/authCodeWithPkce.ts#L48 commit ceb0017
 
-export async function redirectToAuthCodeFlow(clientId: string) {
+import {getClientId} from "@/famjams/constants";
+
+export async function redirectToAuthCodeFlow() {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
     localStorage.setItem("verifier", verifier);
 
     const params = new URLSearchParams();
-    params.append("client_id", clientId);
+    params.append("client_id", getClientId());
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:5173/callback");
     // params.append("scope", "user-read-private user-read-email");
@@ -17,11 +19,11 @@ export async function redirectToAuthCodeFlow(clientId: string) {
     document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
-export async function getAccessToken(clientId: string, code: string) {
+export async function getAccessToken(code: string) {
     const verifier = localStorage.getItem("verifier");
 
     const params = new URLSearchParams();
-    params.append("client_id", clientId);
+    params.append("client_id", getClientId());
     params.append("grant_type", "authorization_code");
     params.append("code", code);
     params.append("redirect_uri", "http://localhost:5173/callback");

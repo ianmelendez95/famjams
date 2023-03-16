@@ -7,9 +7,8 @@ const router = useRouter()
 
 async function handleCode(code: string) {
   localStorage.setItem("code", code)
-  const clientId = localStorage.getItem("clientId") as string
 
-  const accessToken = await getAccessToken(clientId, code)
+  const accessToken = await getAccessToken(code)
 
   localStorage.setItem("accessToken", accessToken)
 

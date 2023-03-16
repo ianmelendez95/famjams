@@ -1,3 +1,5 @@
-export const CLIENT_ID = "dc493626472bdcab3e5b3ba3ec4622bb2a45fa70c36f1d0c44fba99397e5042141f2b74e7864750f13f93cbec298a280"
-export const PLAYLIST_ID = "d92b4078376486e8652158f2973b589c0a22f85390008c17108e36cc87f5a6d0b650d0aa2dc7"
+export function getClientId(): string {
+    // prevent low effort source swiping
+    return new TextDecoder().decode(new Uint8Array([52,50,55,55,55,56,52,55,52,57,53,102,52,53,52,101,97,50,101,100,55,55,52,52,101,98,57,52,97,99,48,102]))
+}
 
