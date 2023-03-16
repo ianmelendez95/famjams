@@ -1,3 +1,22 @@
+export interface UserPlaylists {
+    items: UserPlaylist[],
+    next: string,
+    offset: number
+}
+
+/**
+ * The 'playlist report' for a given user
+ */
+export interface UserPlaylist {
+    id: string,
+    images: Image[],
+    name: string,
+    tracks: {
+        href: string,
+        total: number
+    }
+}
+
 export interface Playlist {
     tracks: {
         items: Track[]

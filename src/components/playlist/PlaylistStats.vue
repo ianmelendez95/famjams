@@ -1,12 +1,15 @@
 <script setup lang="ts">
 // import type {UserProfile} from '@/spotify/types'
-import type {Track, UserProfile} from "@/spotify/types";
+import type {Track, UserPlaylists, UserProfile} from "@/spotify/types";
 import {getUsersToTracks} from "@/famjams/playlist";
 import {ref, onMounted} from "vue";
 import {DonutChart} from "@/components/observable/donut";
+import {fetchCurrentUserPlaylists} from "@/spotify/api";
 
 const accessToken = localStorage.getItem("accessToken") as string
 const playlistId = localStorage.getItem("playlistId") as string
+
+const playlists: UserPlaylists = await fetchCurrentUserPlaylists(accessToken)
 
 const userTracks: Map<UserProfile, Track[]> = await getUsersToTracks(accessToken, playlistId)
 const userTrackCounts: [UserProfile, number][] = [...userTracks.entries()].map(([u, ts]) => [u, ts.length])
@@ -29,6 +32,13 @@ onMounted(() => {
 <!--  <div v-for="[user, count] in userTrackCounts" :key="user">-->
 <!--    {{ user.display_name }}: {{ count }}-->
 <!--  </div>-->
+  <div>
+    <select name="selected_playlist">
+      <option :value="playlist.id" v-for="playlist in playlists.items" :key="playlist.id">
+        {{ playlist.name }}
+      </option>
+    </select>
+  </div>
   <div ref="d3DonutDiv"></div>
 </template>
 
