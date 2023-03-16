@@ -4,26 +4,34 @@ import type {Track, UserPlaylist, UserProfile} from "@/spotify/types";
 import {getCurrentUserPlaylists, getUsersToTracks} from "@/famjams/playlist";
 import {ref, onMounted} from "vue";
 import {DonutChart} from "@/components/observable/donut";
+import {clearDivBody, replaceDivBody} from "@/famjams/util";
 
 const accessToken = localStorage.getItem("accessToken") as string
-const playlistId = localStorage.getItem("playlistId") as string
 
 const playlists: UserPlaylist[] = await getCurrentUserPlaylists(accessToken)
 
-const userTracks: Map<UserProfile, Track[]> = await getUsersToTracks(accessToken, playlistId)
-const userTrackCounts: [UserProfile, number][] = [...userTracks.entries()].map(([u, ts]) => [u, ts.length])
-
 let d3DonutDiv = ref<HTMLDivElement | null>(null)
 
-const chartData = userTrackCounts
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .sort(([_1, c1], [_2, c2]) => c2 - c1)
-    .map(([user, count]) => ({ user, value: count }))
+let selectedPlaylistId = ref<string>('')
+async function renderSelectedStats() {
+  if (!selectedPlaylistId.value) {
+    clearDivBody(d3DonutDiv.value!)
+    return
+  }
 
-const d3DonutSvg = DonutChart(chartData)
+  const userTracks: Map<UserProfile, Track[]> = await getUsersToTracks(accessToken, selectedPlaylistId.value)
+  const userTrackCounts: [UserProfile, number][] = [...userTracks.entries()].map(([u, ts]) => [u, ts.length])
+
+  const chartData = userTrackCounts
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .sort(([_1, c1], [_2, c2]) => c2 - c1)
+      .map(([user, count]) => ({ user, value: count }))
+
+  replaceDivBody(d3DonutDiv.value!, DonutChart(chartData))
+}
 
 onMounted(() => {
-  d3DonutDiv.value!.appendChild(d3DonutSvg)
+  renderSelectedStats()
 })
 </script>
 
@@ -32,7 +40,8 @@ onMounted(() => {
 <!--    {{ user.display_name }}: {{ count }}-->
 <!--  </div>-->
   <div>
-    <select name="selected_playlist">
+    <select name="selected_playlist" v-model="selectedPlaylistId" @change="renderSelectedStats">
+      <option value=""></option>
       <option :value="playlist.id" v-for="playlist in playlists" :key="playlist.id">
         {{ playlist.name }}
       </option>
