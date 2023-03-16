@@ -5,6 +5,7 @@ import App from './App.vue'
 import './assets/main.css'
 import Home from "@/components/Home.vue";
 import Callback from "@/components/Callback.vue";
+import PlaylistStatsSuspense from "@/components/playlist/PlaylistStatsSuspense.vue";
 import PlaylistSelectSuspense from "@/components/playlist/PlaylistSelectSuspense.vue";
 
 const router = VueRouter.createRouter({
@@ -12,7 +13,8 @@ const router = VueRouter.createRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/callback', component: Callback },
-        { path: '/playlist', component: PlaylistSelectSuspense }
+        { path: '/playlist', component: PlaylistSelectSuspense },
+        { path: '/playlist/:id', component: PlaylistStatsSuspense }
     ]
 })
 
