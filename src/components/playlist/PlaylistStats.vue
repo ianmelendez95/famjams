@@ -5,8 +5,14 @@ import {getCurrentUserPlaylists, getUsersToTracks} from "@/famjams/playlist";
 import {ref, onMounted} from "vue";
 import {DonutChart} from "@/components/observable/donut";
 import {clearDivBody, replaceDivBody} from "@/famjams/util";
+import {useRouter} from "vue-router";
 
-const accessToken = localStorage.getItem("accessToken") as string
+const router = useRouter()
+
+const accessToken = sessionStorage.getItem("accessToken")
+if (accessToken == null) {
+  router.push("/")
+}
 
 const playlists: UserPlaylist[] = await getCurrentUserPlaylists(accessToken)
 

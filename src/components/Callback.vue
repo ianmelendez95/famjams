@@ -6,11 +6,11 @@ import {getAccessToken} from "@/spotify/authCodeWithPkce";
 const router = useRouter()
 
 async function handleCode(code: string) {
-  localStorage.setItem("code", code)
+  sessionStorage.setItem("code", code)
 
   const accessToken = await getAccessToken(code)
 
-  localStorage.setItem("accessToken", accessToken)
+  sessionStorage.setItem("accessToken", accessToken)
 
   await router.push('/playlist')
 }

@@ -6,7 +6,7 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 
 onMounted(() => {
-  if (localStorage.getItem("accessToken") == null) {
+  if (sessionStorage.getItem("accessToken") == null) {
     redirectToAuthCodeFlow();
   } else {
     router.push("/playlist")

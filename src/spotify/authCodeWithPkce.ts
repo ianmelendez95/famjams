@@ -6,7 +6,7 @@ export async function redirectToAuthCodeFlow() {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
-    localStorage.setItem("verifier", verifier);
+    sessionStorage.setItem("verifier", verifier);
 
     const params = new URLSearchParams();
     params.append("client_id", getClientId());
@@ -20,7 +20,7 @@ export async function redirectToAuthCodeFlow() {
 }
 
 export async function getAccessToken(code: string) {
-    const verifier = localStorage.getItem("verifier");
+    const verifier = sessionStorage.getItem("verifier");
 
     const params = new URLSearchParams();
     params.append("client_id", getClientId());
