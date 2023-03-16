@@ -13,7 +13,7 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
     // Released under the ISC license.
     // https://observablehq.com/@d3/donut-chart
 
-    const width = 640 // outer width, in pixels
+    const width = 400 // outer width, in pixels
     const height = 400 // outer height, in pixels
     const innerRadius = Math.min(width, height) / 3 // inner radius of pie, in pixels (non-zero for donut)
     const outerRadius = Math.min(width, height) / 2 // outer radius of pie, in pixels
