@@ -7,16 +7,15 @@ interface DonutChartData {
     value: number
 }
 
-export function DonutChart(data: DonutChartData[]): SVGSVGElement {
+export function buildDonut(data: DonutChartData[],
+                           width: number): SVGSVGElement {
     // This is modified and extended work from Observable example.
     // Copyright 2021 Observable, Inc.
     // Released under the ISC license.
     // https://observablehq.com/@d3/donut-chart
 
-    const width = 400 // outer width, in pixels
-    const height = 400 // outer height, in pixels
-    const innerRadius = Math.min(width, height) / 3 // inner radius of pie, in pixels (non-zero for donut)
-    const outerRadius = Math.min(width, height) / 2 // outer radius of pie, in pixels
+    const innerRadius = width / 3 // inner radius of pie, in pixels (non-zero for donut)
+    const outerRadius = width / 2 // outer radius of pie, in pixels
     const labelRadius = (innerRadius + outerRadius) / 2 // center radius of labels
 
     const padAngle = 6 / outerRadius // angular separation between wedges [1 ~= tan(1/outerRadius) * outerRadius, padAngle ~= padThickness / outerRadius]
@@ -43,8 +42,8 @@ export function DonutChart(data: DonutChartData[]): SVGSVGElement {
 
     const svg = d3.create("svg")
         .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", [-width / 2, -height / 2, width, height])
+        .attr("height", width)
+        .attr("viewBox", [-width / 2, -width / 2, width, width])
         .attr("style", "height: auto; height: intrinsic;");
 
     svg.append("g")

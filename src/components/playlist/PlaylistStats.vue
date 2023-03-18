@@ -3,7 +3,7 @@
 import type {Track, UserProfile} from "@/spotify/types";
 import {getUsersToTracks} from "@/famjams/playlist";
 import {onMounted, ref} from "vue";
-import {DonutChart} from "@/components/observable/donut";
+import {buildDonut} from "@/components/observable/donut";
 import {replaceDivBody} from "@/famjams/util";
 import {useRoute, useRouter} from "vue-router";
 
@@ -15,7 +15,7 @@ if (accessToken == null) {
   router.push("/")
 }
 
-let d3DonutDiv = ref<HTMLDivElement | null>(null)
+let donutDivRef = ref<HTMLDivElement | null>(null)
 
 const userTracks: Map<UserProfile, Track[]> = await getUsersToTracks(accessToken, route.params.id as string)
 const userTrackCounts: [UserProfile, number][] = [...userTracks.entries()].map(([u, ts]) => [u, ts.length])
@@ -26,12 +26,15 @@ const chartData = userTrackCounts
     .map(([user, count]) => ({ user, value: count }))
 
 onMounted(() => {
-  replaceDivBody(d3DonutDiv.value!, DonutChart(chartData))
+  const donutDiv = donutDivRef.value!
+  const width = donutDiv.getBoundingClientRect().width
+  replaceDivBody(donutDiv, buildDonut(chartData, width))
 })
 </script>
 
 <template>
-  <div ref="d3DonutDiv"></div>
+  <div ref="donutDivRef"
+       class="max-w-full w-[320px]"></div>
 </template>
 
 <style scoped>
