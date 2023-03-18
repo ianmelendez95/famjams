@@ -16,6 +16,9 @@ export interface UserPlaylist {
     tracks: {
         href: string,
         total: number
+    },
+    owner: {
+        display_name: string
     }
 }
 
