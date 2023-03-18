@@ -33,8 +33,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="donutDivRef"
-       class="max-w-full w-[320px]"></div>
+  <div class="flex flex-row justify-center">
+    <div ref="donutDivRef"
+         class="max-w-full w-[320px]"></div>
+  </div>
 </template>
 
 <style scoped>
