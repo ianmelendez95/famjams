@@ -34,7 +34,7 @@ export async function fetchUserProfile(accessToken: string, userId: string): Pro
   return await fetchSpotify(accessToken, "/users/" + userId)
 }
 
-async function fetchSpotify<T>(accessToken: string, path: string, params?: Params): Promise<T> {
+export async function fetchSpotify<T>(accessToken: string, path: string, params?: Params): Promise<T> {
   const url = "https://api.spotify.com/v1"
       + (path.startsWith("/") ? path : '/' + path)
       + (params ? '?' + genUrlParams(params) : '')
