@@ -6,11 +6,12 @@ import {onMounted, ref} from "vue";
 import {buildDonut} from "@/components/observable/donut";
 import {replaceDivBody} from "@/famjams/util";
 import {useRoute, useRouter} from "vue-router";
+import {getAccessToken} from "@/spotify/api";
 
 const router = useRouter()
 const route = useRoute()
 
-const accessToken = sessionStorage.getItem("accessToken") as string
+const accessToken = getAccessToken()
 if (accessToken == null) {
   router.push("/")
 }

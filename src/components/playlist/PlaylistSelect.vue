@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
-import type {UserPlaylist, UserPlaylists} from "@/spotify/types";
-import {getCurrentUserPlaylists, getMultiContributorPlaylists} from "@/famjams/playlist";
+import type {UserPlaylist} from "@/spotify/types";
+import {getMultiContributorPlaylists} from "@/famjams/playlist";
+import {getAccessToken} from "@/spotify/api";
 
 const router = useRouter()
 
-const accessToken = sessionStorage.getItem("accessToken") as string
-if (accessToken == null) {
-  router.push("/")
-}
+const accessToken = getAccessToken()
 
 const playlists: UserPlaylist[] = await getMultiContributorPlaylists(accessToken)
 

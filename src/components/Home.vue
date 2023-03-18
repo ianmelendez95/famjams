@@ -2,14 +2,15 @@
 import {redirectToAuthCodeFlow} from "@/spotify/authCodeWithPkce";
 import {onMounted} from "vue";
 import {useRouter} from "vue-router";
+import {haveAccessToken} from "@/spotify/api";
 
 const router = useRouter()
 
 onMounted(() => {
-  if (sessionStorage.getItem("accessToken") == null) {
-    redirectToAuthCodeFlow();
-  } else {
+  if (haveAccessToken()) {
     router.push("/playlist")
+  } else {
+    redirectToAuthCodeFlow();
   }
 })
 </script>

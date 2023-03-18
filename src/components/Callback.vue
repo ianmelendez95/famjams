@@ -2,6 +2,7 @@
 import {onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {getAccessToken} from "@/spotify/authCodeWithPkce";
+import {setAccessToken} from "@/spotify/api";
 
 const router = useRouter()
 
@@ -9,8 +10,7 @@ async function handleCode(code: string) {
   sessionStorage.setItem("code", code)
 
   const accessToken = await getAccessToken(code)
-
-  sessionStorage.setItem("accessToken", accessToken)
+  setAccessToken(accessToken)
 
   await router.push('/playlist')
 }

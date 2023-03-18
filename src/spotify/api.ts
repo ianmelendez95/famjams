@@ -1,5 +1,7 @@
 import type {Playlist, UserPlaylist, UserPlaylists, UserProfile} from "@/spotify/types";
 
+export const SPOTIFY_AUTH_ERROR = "SPOTIFY_AUTH_ERROR"
+
 export interface Params {
   [key: string]: any
 }
@@ -7,6 +9,26 @@ export interface Params {
 export interface UserPlaylistOptions {
   limit?: number,
   offset?: number
+}
+
+export function haveAccessToken(): boolean {
+  return sessionStorage.getItem("accessToken") !== null
+}
+
+export function getAccessToken(): string {
+  const token: string | null = sessionStorage.getItem("accessToken")
+  if (token === null) {
+    throw new Error(SPOTIFY_AUTH_ERROR + ": no auth token in session storage")
+  }
+  return token
+}
+
+export function setAccessToken(token: string) {
+  sessionStorage.setItem("accessToken", token)
+}
+
+export function clearAccessToken() {
+  sessionStorage.removeItem("accessToken")
 }
 
 export async function fetchAllCurrentUserPlaylists(accessToken: string): Promise<UserPlaylist[]> {
@@ -48,9 +70,12 @@ async function fetchSpotifyRaw<T>(accessToken: string, url: string): Promise<T> 
   });
 
   const json = await result.json();
-
   if (json.error) {
-    throw new Error("Server error: " + JSON.stringify(json.error))
+    if (json.error.status && json.error.status === 401) {
+      throw new Error(SPOTIFY_AUTH_ERROR + ": " + JSON.stringify(json.error))
+    } else {
+      throw new Error("Server error: " + JSON.stringify(json.error))
+    }
   }
 
   return json
