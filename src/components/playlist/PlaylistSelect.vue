@@ -30,13 +30,13 @@ function trimLength(string: string, maxLength: number): string {
     <div v-for="playlist in playlists"
          :key="playlist.id"
          @click="selectPlaylist(playlist.id)"
-         class="flex flex-row p-4 border-b border-slate-500 cursor-pointer">
+         class="flex flex-row p-4 cursor-pointer">
       <div class="inline-block pr-4">
         <img v-if="playlist.images[0]" v-bind:src="playlist.images[0].url" class="w-16" alt="[Playlist Image]"/>
       </div>
       <div class="inline-block flex flex-col">
-        <div class="text-2xl text-slate-400 inline-block">{{ trimLength(playlist.name, 30) }}</div>
-        <div class="inline-block">{{ trimLength(playlist.owner.display_name, 30) }}</div>
+        <div class="text-2xl text-slate-50 inline-block">{{ trimLength(playlist.name, 30) }}</div>
+        <div class="inline-block text-slate-400">{{ trimLength(playlist.owner.display_name, 30) }}</div>
       </div>
     </div>
   </div>
