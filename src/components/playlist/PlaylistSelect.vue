@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import type {UserPlaylist, UserPlaylists} from "@/spotify/types";
-import {getCurrentUserPlaylists, getMultiUserPlaylists} from "@/famjams/playlist";
+import {getCurrentUserPlaylists, getMultiContributorPlaylists} from "@/famjams/playlist";
 
 const router = useRouter()
 
@@ -10,7 +10,7 @@ if (accessToken == null) {
   router.push("/")
 }
 
-const playlists: UserPlaylist[] = await getMultiUserPlaylists(accessToken)
+const playlists: UserPlaylist[] = await getMultiContributorPlaylists(accessToken)
 
 function selectPlaylist(playlistId: string) {
   router.push("/playlist/" + playlistId)

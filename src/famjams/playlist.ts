@@ -18,19 +18,19 @@ export async function getUsersToTracks(accessToken: string, playlistId: string):
     ))
 }
 
-export async function getMultiUserPlaylists(accessToken: string): Promise<UserPlaylist[]> {
-    return await filterMultiUserPlaylists(accessToken, await getCurrentUserPlaylists(accessToken))
+export async function getMultiContributorPlaylists(accessToken: string): Promise<UserPlaylist[]> {
+    return await filterMultiContributorPlaylists(accessToken, await getCurrentUserPlaylists(accessToken))
 }
 
-export async function filterMultiUserPlaylists(accessToken: string, playlists: UserPlaylist[]): Promise<UserPlaylist[]> {
+export async function filterMultiContributorPlaylists(accessToken: string, playlists: UserPlaylist[]): Promise<UserPlaylist[]> {
     const assocMultiUser: [UserPlaylist, boolean][] = await Promise.all(
-        playlists.map(p => isPlaylistMultiUser(accessToken, p.id).then(r => [p, r] as [UserPlaylist, boolean]))
+        playlists.map(p => isPlaylistMultiContributor(accessToken, p.id).then(r => [p, r] as [UserPlaylist, boolean]))
     )
 
     return assocMultiUser.filter(([_, isMultiUser]) => isMultiUser).map(([p, _]) => p)
 }
 
-export async function isPlaylistMultiUser(accessToken: string, playlistId: string): Promise<boolean> {
+export async function isPlaylistMultiContributor(accessToken: string, playlistId: string): Promise<boolean> {
     const result: { items: [{ added_by: { id: string } }] } =
         await fetchSpotify(accessToken, `/playlists/${playlistId}/tracks`, {
             fields: "items(added_by.id)"
