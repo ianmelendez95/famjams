@@ -12,6 +12,8 @@ if (accessToken == null) {
 
 const playlists: UserPlaylist[] = await getMultiContributorPlaylists(accessToken)
 
+console.log(playlists)
+
 function selectPlaylist(playlistId: string) {
   router.push("/playlist/" + playlistId)
 }

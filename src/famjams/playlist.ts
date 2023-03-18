@@ -36,5 +36,7 @@ export async function isPlaylistMultiContributor(accessToken: string, playlistId
             fields: "items(added_by.id)"
         })
 
-    return new Set(result.items.map(item => item.added_by.id)).size > 1
+    return new Set(
+        result.items.filter(item => item.added_by.id).map(item => item.added_by.id)
+    ).size > 1
 }
