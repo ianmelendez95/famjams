@@ -12,7 +12,10 @@ if (accessToken == null) {
 
 const playlists: UserPlaylist[] = await getMultiContributorPlaylists(accessToken)
 
-console.log(playlists)
+if (playlists.length == 1) {
+  // if only one playlist available, send to that playlist
+  selectPlaylist(playlists[0].id)
+}
 
 function selectPlaylist(playlistId: string) {
   router.push("/playlist/" + playlistId)
@@ -28,7 +31,12 @@ function trimLength(string: string, maxLength: number): string {
 </script>
 
 <template>
-  <div>
+  <div v-if="playlists.length === 0">
+    <p>No playlists with multiple contributors found.</p>
+    <p>Start a playlist with your friends!</p>
+    <p>(Or strangers if you're desperate)</p>
+  </div>
+  <div v-else>
     <div v-for="playlist in playlists"
          :key="playlist.id"
          @click="selectPlaylist(playlist.id)"
@@ -38,7 +46,7 @@ function trimLength(string: string, maxLength: number): string {
       </div>
       <div class="inline-block flex flex-col">
         <div class="text-2xl text-slate-50 inline-block">{{ trimLength(playlist.name, 30) }}</div>
-        <div class="inline-block text-slate-400">{{ trimLength(playlist.owner.display_name, 30) }}</div>
+        <div class="inline-block text-slate-400">{{ trimLength(playlist.owner.display_name, 35) }}</div>
       </div>
     </div>
   </div>
