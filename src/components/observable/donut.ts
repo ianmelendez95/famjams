@@ -24,7 +24,13 @@ export function buildDonut(data: DonutChartData[],
     const N: string[] = d3.map(data, (d) => d.user.display_name);
     const V = d3.map(data, (d) => d.value);
     const I = d3.range(N.length);
-    const userImageUrls: string[] = d3.map(data, (d) => d.user.images[0].url) // TODO - confirm what happens with no profile picture
+    const userImageUrls: string[] = d3.map(data, (d) => {
+        if (d.user.images.length > 0) {
+            return d.user.images[0].url
+        } else {
+            return ''
+        }
+    })
 
     const imageWidths = calcImageWidths(outerRadius - innerRadius, V)
 
@@ -55,12 +61,10 @@ export function buildDonut(data: DonutChartData[],
         .append("title")
         .text((d: PieArcDatum<number>) => N[d.data]);
 
+    // append the images
     svg.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
-        .attr("text-anchor", "middle")
         .selectAll("image")
-        .data(arcs)
+        .data(arcs.filter((d: PieArcDatum<number>) => userImageUrls[d.data].length > 0))
         .join("image")
         .attr("transform", (d: PieArcDatum<number>) => `translate(${imageTransform(imageWidths[d.data], arcLabel.centroid(d as any))})`)
         .attr("width", (d) => imageWidths[d.data])
@@ -68,21 +72,36 @@ export function buildDonut(data: DonutChartData[],
         .attr("style", "clip-path: circle(closest-side)")  // https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape/circle
         .attr("xlink:href", (d) => userImageUrls[d.data])
 
-        // .join("text")
-        // .attr("transform", (d: PieArcDatum<number>) => `translate(${arcLabel.centroid(d as any)})`)
-        // .selectAll("tspan")
-        // .data((d: PieArcDatum<number>) => {
-        //     const lines = `${title(d.data)}`.split(/\n/);
-        //     return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
-        // })
-        // .join("tspan")
-        // .attr("x", 0)
-        // .attr("y", (_: string, i: number) => `${i * 1.1}em`)
-        // .attr("font-weight", (_: string, i: number) => i ? null : "bold")
-        // .text(d => d);
+    // append the letter avatars for those missing images
+    svg.append("g")
+        .selectAll("circle")
+        .data(arcs.filter((d: PieArcDatum<number>) => userImageUrls[d.data].length == 0))
+        .join("circle")
+        .attr("transform", (d: PieArcDatum<number>) => `translate(${arcLabel.centroid(d as any)})`)
+        .attr("width", (d) => imageWidths[d.data])
+        .attr("height", (d) => imageWidths[d.data])
+        .attr("r", (d) => imageWidths[d.data] / 2)
+        .style("fill", "green")
 
     return Object.assign(svg.node() as SVGSVGElement, {scales: {color}});
 }
+
+// function letterAvatar(letters: string,
+//                       width: number) {
+//     const svg = d3.create("svg")
+//         .attr("width", width)
+//         .attr("height", width)
+//         .attr("viewBox", [-width / 2, -width / 2, width, width])
+//         .attr("style", "height: auto; height: intrinsic;")
+//
+//     svg.append("circle")
+//         .attr("cx", 0)
+//         .attr("cy", 0)
+//         .attr("r", width / 2)
+//         .style("fill", "green")
+//
+//     return svg.node()
+// }
 
 function calcImageWidths(arcWidth: number, values: number[]): number[] {
     const [min, max] = d3.extent(values) as [number, number]
