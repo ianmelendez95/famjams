@@ -7,6 +7,11 @@ interface DonutChartData {
     value: number
 }
 
+interface AvatarInitialsTextData {
+    y: number,
+    text: string
+}
+
 export function buildDonut(data: DonutChartData[],
                            width: number): SVGSVGElement {
     // This is modified and extended work from Observable example.
@@ -85,24 +90,27 @@ export function buildDonut(data: DonutChartData[],
         .attr("width", (d) => imageWidths[d.data])
         .attr("height", (d) => imageWidths[d.data])
         .attr("r", (d) => imageWidths[d.data] / 2)
-        .style("fill", "green")
+        .style("fill", "#B87333")
 
     svg.append("g")
         .attr("font-family", "sans-serif")
-        .attr("font-size", 20)
         .attr("fill", "#eee")
         .attr("text-anchor", "middle")
         .selectAll("text")
         .data(arcs.filter((d: PieArcDatum<number>) => userImageUrls[d.data].length == 0))
         .join("text")
+        .attr("font-size", d => (imageWidths[d.data] * 0.63))
         .attr("transform", d => `translate(${arcLabel.centroid(d as any)})`)
         .selectAll("tspan")
-        .data(d => userInitials[d.data])
+        .data<AvatarInitialsTextData>(d => [{
+            y: imageWidths[d.data] * 0.24,
+            text: userInitials[d.data]
+        }])
         .join("tspan")
         .attr("x", 0)
-        .attr("y", 10)
+        .attr("y", d => d.y)
         .attr("font-weight", "bold")
-        .text(d => d);
+        .text(d => d.text);
     return Object.assign(svg.node() as SVGSVGElement, {scales: {color}});
 }
 
