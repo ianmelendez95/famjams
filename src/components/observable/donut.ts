@@ -59,7 +59,7 @@ export function buildDonut(data: DonutChartData[],
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
         .attr("text-anchor", "middle")
-        .selectAll("text")
+        .selectAll("image")
         .data(arcs)
         .join("image")
         .attr("transform", (d: PieArcDatum<number>) => `translate(${imageTransform(imageWidths[d.data], arcLabel.centroid(d as any))})`)
