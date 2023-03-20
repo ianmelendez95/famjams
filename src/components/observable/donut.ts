@@ -24,6 +24,10 @@ export function buildDonut(data: DonutChartData[],
     const N: string[] = d3.map(data, (d) => d.user.display_name);
     const V = d3.map(data, (d) => d.value);
     const I = d3.range(N.length);
+
+    const userInitials: string[] = d3.map(data, d =>
+        parseInitials(d.user.display_name)
+    )
     const userImageUrls: string[] = d3.map(data, (d) => {
         if (d.user.images.length > 0) {
             return d.user.images[0].url
@@ -83,25 +87,33 @@ export function buildDonut(data: DonutChartData[],
         .attr("r", (d) => imageWidths[d.data] / 2)
         .style("fill", "green")
 
+    svg.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 20)
+        .attr("fill", "#eee")
+        .attr("text-anchor", "middle")
+        .selectAll("text")
+        .data(arcs.filter((d: PieArcDatum<number>) => userImageUrls[d.data].length == 0))
+        .join("text")
+        .attr("transform", d => `translate(${arcLabel.centroid(d as any)})`)
+        .selectAll("tspan")
+        .data(d => userInitials[d.data])
+        .join("tspan")
+        .attr("x", 0)
+        .attr("y", 10)
+        .attr("font-weight", "bold")
+        .text(d => d);
     return Object.assign(svg.node() as SVGSVGElement, {scales: {color}});
 }
 
-// function letterAvatar(letters: string,
-//                       width: number) {
-//     const svg = d3.create("svg")
-//         .attr("width", width)
-//         .attr("height", width)
-//         .attr("viewBox", [-width / 2, -width / 2, width, width])
-//         .attr("style", "height: auto; height: intrinsic;")
-//
-//     svg.append("circle")
-//         .attr("cx", 0)
-//         .attr("cy", 0)
-//         .attr("r", width / 2)
-//         .style("fill", "green")
-//
-//     return svg.node()
-// }
+function parseInitials(string: string): string {
+    return string.split(/\s+/)
+        .filter(w => w.length > 0)  // non-empty words
+        .map(w => w[0])             // get first letter of each word
+        .filter(c => c.match(/[a-z]/i))  // check that it is an alphabet letter
+        .map(c => c.toUpperCase())                // make upper case
+        .join('')                                 // join together
+}
 
 function calcImageWidths(arcWidth: number, values: number[]): number[] {
     const [min, max] = d3.extent(values) as [number, number]
