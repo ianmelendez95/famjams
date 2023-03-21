@@ -4,12 +4,13 @@ import type {Track, UserProfile} from "@/spotify/types";
 import {getUsersToTracks} from "@/famjams/playlist";
 import {onMounted, ref} from "vue";
 import {buildDonut} from "@/components/observable/donut";
-import {replaceDivBody} from "@/famjams/util";
 import {useRoute, useRouter} from "vue-router";
 import {getAccessToken} from "@/spotify/api";
+import {useI18n} from "vue-i18n";
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 const accessToken = getAccessToken()
 if (accessToken == null) {
@@ -38,10 +39,14 @@ onMounted(() => {
   <div class="flex flex-col items-center">
     <div class="pb-4">
       <h1 class="font-bold text-5xl text-center text-slate-300 pb-4">
-        Quantity <span class="font-bold" style="text-decoration: underline">is</span> Quality
+        {{ t('award.quantity.title1') }}
+        <span class="font-bold" style="text-decoration: underline">
+          {{ t("award.quantity.title2") }}
+        </span>
+        {{ t("award.quantity.title3") }}
       </h1>
       <p class="text-base text-center text-slate-400">
-        Number of Tracks Contributed
+        {{ t("award.quantity.subtitle") }}
       </p>
     </div>
     <div class="flex flex-row justify-center pb-6">

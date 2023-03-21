@@ -8,6 +8,8 @@ import Callback from "@/components/Callback.vue";
 import PlaylistStatsSuspense from "@/components/playlist/PlaylistStatsSuspense.vue";
 import PlaylistSelectSuspense from "@/components/playlist/PlaylistSelectSuspense.vue";
 import {clearAccessToken, SPOTIFY_AUTH_ERROR} from "@/spotify/api";
+import * as VueI18n from "vue-i18n";
+import {messages} from "@/famjams/i18n";
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHistory(),
@@ -19,9 +21,17 @@ const router = VueRouter.createRouter({
     ]
 })
 
+const i18n = VueI18n.createI18n({
+    legacy: false,
+    locale: 'es',
+    fallbackLocale: 'en',
+    messages
+})
+
 const app = createApp(App)
 
 app.use(router)
+app.use(i18n)
 
 app.config.errorHandler = function (err: unknown, _instance, _info) {
     if ((err as Error).message) {
@@ -29,8 +39,11 @@ app.config.errorHandler = function (err: unknown, _instance, _info) {
         if (error.message.startsWith(SPOTIFY_AUTH_ERROR)) {
             clearAccessToken()
             router.push("/")
+            return
         }
     }
+
+    throw err
 }
 
 app.mount('#app')
