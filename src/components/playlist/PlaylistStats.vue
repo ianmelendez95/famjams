@@ -36,7 +36,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-row justify-center">
     <div ref="donutDivRef"
-         class="max-w-full w-[640px]"></div>
+         class="max-w-full w-[320px]"></div>
   </div>
 </template>
 
