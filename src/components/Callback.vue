@@ -3,8 +3,10 @@ import {onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {getAccessToken} from "@/spotify/authCodeWithPkce";
 import {setAccessToken} from "@/spotify/api";
+import {useI18n} from "vue-i18n";
 
 const router = useRouter()
+const { t } = useI18n()
 
 async function handleCode(code: string) {
   sessionStorage.setItem("code", code)
@@ -31,7 +33,7 @@ onMounted(() => {
 <template>
   <div class="greetings">
     <h3>
-      Redirecting...
+      {{ t('callback.redirecting') }}...
     </h3>
   </div>
 </template>

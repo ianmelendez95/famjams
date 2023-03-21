@@ -3,8 +3,10 @@ import {useRouter} from "vue-router";
 import type {UserPlaylist} from "@/spotify/types";
 import {getMultiContributorPlaylists} from "@/famjams/playlist";
 import {getAccessToken} from "@/spotify/api";
+import {useI18n} from "vue-i18n";
 
 const router = useRouter()
+const { t } = useI18n()
 
 const accessToken = getAccessToken()
 
@@ -30,9 +32,9 @@ function trimLength(string: string, maxLength: number): string {
 
 <template>
   <div v-if="playlists.length === 0">
-    <p>No playlists with multiple contributors found.</p>
-    <p>Start a playlist with your friends!</p>
-    <p>(Or strangers if you're desperate)</p>
+    <p>{{ t('playlistSelect.noneFound1') }}</p>
+    <p>{{ t('playlistSelect.noneFound2') }}</p>
+    <p>{{ t('playlistSelect.noneFound3') }}</p>
   </div>
   <div v-else>
     <div v-for="playlist in playlists"

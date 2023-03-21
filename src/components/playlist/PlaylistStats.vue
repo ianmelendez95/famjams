@@ -39,14 +39,14 @@ onMounted(() => {
   <div class="flex flex-col items-center">
     <div class="pb-4">
       <h1 class="font-bold text-5xl text-center text-slate-300 pb-4">
-        {{ t('award.quantity.title1') }}
+        {{ t('playlistStats.quantity.title1') }}
         <span class="font-bold" style="text-decoration: underline">
-          {{ t("award.quantity.title2") }}
+          {{ t("playlistStats.quantity.title2") }}
         </span>
-        {{ t("award.quantity.title3") }}
+        {{ t("playlistStats.quantity.title3") }}
       </h1>
       <p class="text-base text-center text-slate-400">
-        {{ t("award.quantity.subtitle") }}
+        {{ t("playlistStats.quantity.subtitle") }}
       </p>
     </div>
     <div class="flex flex-row justify-center pb-6">
