@@ -1,14 +1,20 @@
-const SESSION_LOCALE_NAME = "com.famjamz.LOCALE"
+const SESSION_LOCALE_NAME = "com.familyjamz.LOCALE"
 
 export function resolveLocale() {
-    // handle setting via param
     const localeParam = new URLSearchParams(window.location.search).get('locale')
     if (localeParam) {
+        // hard setting via param
         sessionStorage.setItem(SESSION_LOCALE_NAME, localeParam)
     }
 
     const sessionLocale = sessionStorage.getItem(SESSION_LOCALE_NAME)
-    return sessionLocale ? sessionLocale : 'en'
+    if (sessionLocale) {
+        return sessionLocale
+    } else if (window.location.hostname.endsWith(".mx")) {
+        return 'es'
+    } else {
+        return 'en'
+    }
 }
 
 export const messages = {
