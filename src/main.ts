@@ -9,7 +9,7 @@ import PlaylistStatsSuspense from "@/components/playlist/PlaylistStatsSuspense.v
 import PlaylistSelectSuspense from "@/components/playlist/PlaylistSelectSuspense.vue";
 import {clearAccessToken, SPOTIFY_AUTH_ERROR} from "@/spotify/api";
 import * as VueI18n from "vue-i18n";
-import {messages} from "@/famjams/i18n";
+import {messages, resolveLocale} from "@/famjams/i18n";
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHistory(),
@@ -23,7 +23,7 @@ const router = VueRouter.createRouter({
 
 const i18n = VueI18n.createI18n({
     legacy: false,
-    locale: 'es',
+    locale: resolveLocale(),
     fallbackLocale: 'en',
     messages
 })
