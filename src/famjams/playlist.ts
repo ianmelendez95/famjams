@@ -5,10 +5,7 @@ import {
 import type {Track, UserPlaylist, UserProfile} from "@/spotify/types";
 
 export async function getCurrentUserPlaylists(accessToken: string): Promise<UserPlaylist[]> {
-    return await fetchAllItems(
-        accessToken,
-        await fetchSpotify(accessToken, "/me/playlists", { limit: 50 })
-    )
+    return await fetchAllItems(accessToken, "/me/playlists")
 }
 
 export async function getUsersToTracks(accessToken: string, playlistId: string): Promise<Map<UserProfile, Track[]>> {

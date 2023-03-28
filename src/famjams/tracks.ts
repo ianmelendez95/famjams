@@ -1,15 +1,10 @@
 import type {Track} from "@/spotify/types";
-import {fetchAllItems, fetchSpotify} from "@/spotify/api";
+import {fetchAllItems} from "@/spotify/api";
 
 export async function fetchUserTracks(accessToken: string, playlistId: string): Promise<Map<string, Track[]>> {
     const map: Map<string, Track[]> = new Map()
 
-    const tracks: Track[] = await fetchAllItems<Track>(
-        accessToken,
-        fetchSpotify(accessToken, `/playlists/${playlistId}/tracks`, {
-            limit: 50
-        })
-    )
+    const tracks: Track[] = await fetchAllItems<Track>(accessToken, `/playlists/${playlistId}/tracks`)
 
     // associate the users to the songs they added to the playlist
     for (const track of tracks) {

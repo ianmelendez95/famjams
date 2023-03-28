@@ -27,18 +27,30 @@ export function clearAccessToken() {
 }
 
 /**
+ * Given a URL that returns an ItemsResponse<T>, resolves all relevant
+ * items of that collection.
+ * <p>
+ * <b>[The Spotify 'Items' APIs]</b>
+ * <p>
  * The Spotify API has a pattern for querying a collection of items.
+ * <p>
  * Each API call returns an object with the 'items' as well as a possible 'next' href.
  * If the 'next' href is provided, it can be called to retrieve the next batch of items.
  * This method recognizes such responses and fulfills all the 'next' queries to collect all the items.
+ *
+ * @param accessToken
+ * @param url the url which when called returns ItemsResponse<T>
+ * @see ItemsResponse
  */
-export async function fetchAllItems<T>(accessToken: string, 
-                                       initialResponse: ItemsResponse<T> | PromiseLike<ItemsResponse<T>>) {
+export async function fetchAllItems<T>(accessToken: string, url: string): Promise<T[]> {
   const allItems: T[] = []
 
-  let response: ItemsResponse<T> = await initialResponse
+  let response: ItemsResponse<T> = await fetchSpotify(accessToken, url, { limit: 50 })
   allItems.push(...response.items)
   while (response.next != null) {
+    // iterate sequentially instead of using Promise.all with
+    // parallel calls via usage of 'total' and 'offset' because
+    // then we would increase the risk of hitting the rate limit
     response = await fetchSpotifyRaw(accessToken, response.next)
     allItems.push(...response.items)
   }
