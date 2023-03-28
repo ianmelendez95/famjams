@@ -2,7 +2,7 @@ import * as d3 from 'd3'
 import type {Arc, DefaultArcObject, PieArcDatum} from "d3";
 import type {UserProfile} from "@/spotify/types";
 
-interface DonutChartData {
+export interface DonutChartData {
     user: UserProfile,
     value: number
 }
@@ -10,6 +10,10 @@ interface DonutChartData {
 interface AvatarInitialsTextData {
     y: number,
     text: string
+}
+
+export function prepareUserChartData(userAssoc: [UserProfile, number][]): DonutChartData[] {
+    return userAssoc.map(([user, value]) => ({user, value}))
 }
 
 export function buildDonut(data: DonutChartData[],

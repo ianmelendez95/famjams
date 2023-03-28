@@ -38,6 +38,10 @@ export const messages = {
                 title2: "is",
                 title3: "Quality",
                 subtitle: "Number of Tracks Contributed"
+            },
+            popularity: {
+                title: "Popularity",
+                subtitle: "Average Track Popularity"
             }
         }
     },
@@ -61,6 +65,10 @@ export const messages = {
                 title2: "es",
                 title3: "Calidad",
                 subtitle: "Número de Pistas Contribuidas"
+            },
+            popularity: {
+                title: "Popularidad",
+                subtitle: "Popularidad Promedio de la Pista"
             }
         }
     }

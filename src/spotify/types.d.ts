@@ -24,7 +24,10 @@ export interface Track {
     added_by: {
         id: '12139552232'
     },
-    name: string
+    name: string,
+    track: {
+        popularity: number
+    }
 }
 
 export interface UserProfile {
