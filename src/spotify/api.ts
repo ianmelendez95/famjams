@@ -71,8 +71,17 @@ async function fetchSpotifyRaw<T>(accessToken: string, url: string): Promise<T> 
 
   const json = await result.json();
   if (json.error) {
-    if (json.error.status && json.error.status === 401) {
+    if (json.error.status === 401) {
       throw new Error(SPOTIFY_AUTH_ERROR + ": " + JSON.stringify(json.error))
+    } else if (json.error.status === 429) {
+      console.warn("Rate limit exceeded, retrying in " + result.headers.get("retry-after") + " seconds")
+      const retryAfterSeconds: number = parseInt(result.headers.get("retry-after") as string)
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log("TRACE: retrying now")
+          resolve(fetchSpotifyRaw(accessToken, url))
+        }, retryAfterSeconds * 1000)
+      })
     } else {
       throw new Error("Server error: " + JSON.stringify(json.error))
     }
