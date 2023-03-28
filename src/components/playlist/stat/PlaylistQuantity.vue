@@ -31,7 +31,7 @@ onMounted(() => {
         {{ t("playlistStats.quantity.subtitle") }}
       </p>
     </div>
-    <div class="flex flex-row items-center justify-center">
+    <div class="md:flex flex-row items-center justify-center">
       <div class="flex flex-row justify-center pb-6 pr-6">
         <div ref="donutDivRef_count" class="max-w-full w-[320px]"></div>
       </div>
