@@ -67,7 +67,7 @@ export const messages = {
                 subtitle: "Número de pistas contribuidas"
             },
             popularity: {
-                title: "Pues... eres basico",
+                title: "Pues... eres del montón",
                 subtitle: "Popularidad promedio de la pista"
             }
         }
