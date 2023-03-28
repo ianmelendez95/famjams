@@ -1,8 +1,6 @@
-export interface UserPlaylists {
-    items: UserPlaylist[],
+export interface ItemsResponse<T> {
     next: string | null,
-    offset: number,
-    total: number
+    items: T[]
 }
 
 /**
@@ -19,12 +17,6 @@ export interface UserPlaylist {
     },
     owner: {
         display_name: string
-    }
-}
-
-export interface Playlist {
-    tracks: {
-        items: Track[]
     }
 }
 

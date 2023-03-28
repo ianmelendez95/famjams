@@ -1,14 +1,9 @@
-import type {Playlist, UserPlaylist, UserPlaylists, UserProfile} from "@/spotify/types";
+import type {ItemsResponse} from "@/spotify/types";
 
 export const SPOTIFY_AUTH_ERROR = "SPOTIFY_AUTH_ERROR"
 
 export interface Params {
   [key: string]: any
-}
-
-export interface UserPlaylistOptions {
-  limit?: number,
-  offset?: number
 }
 
 export function haveAccessToken(): boolean {
@@ -31,29 +26,24 @@ export function clearAccessToken() {
   sessionStorage.removeItem("accessToken")
 }
 
-export async function fetchAllCurrentUserPlaylists(accessToken: string): Promise<UserPlaylist[]> {
-  const allPlaylists: UserPlaylist[] = []
+/**
+ * The Spotify API has a pattern for querying a collection of items.
+ * Each API call returns an object with the 'items' as well as a possible 'next' href.
+ * If the 'next' href is provided, it can be called to retrieve the next batch of items.
+ * This method recognizes such responses and fulfills all the 'next' queries to collect all the items.
+ */
+export async function fetchAllItems<T>(accessToken: string, 
+                                       initialResponse: ItemsResponse<T> | PromiseLike<ItemsResponse<T>>) {
+  const allItems: T[] = []
 
-  let response: UserPlaylists = await fetchCurrentUserPlaylists(accessToken, { limit: 50 })
-  allPlaylists.push(...response.items)
+  let response: ItemsResponse<T> = await initialResponse
+  allItems.push(...response.items)
   while (response.next != null) {
     response = await fetchSpotifyRaw(accessToken, response.next)
-    allPlaylists.push(...response.items)
+    allItems.push(...response.items)
   }
 
-  return allPlaylists
-}
-
-export async function fetchCurrentUserPlaylists(accessToken: string, options?: UserPlaylistOptions): Promise<UserPlaylists> {
-  return await fetchSpotify(accessToken, "/me/playlists", options)
-}
-
-export async function fetchPlaylist(accessToken: string, playlistId: string): Promise<Playlist> {
-  return await fetchSpotify(accessToken, "/playlists/" + playlistId)
-}
-
-export async function fetchUserProfile(accessToken: string, userId: string): Promise<UserProfile> {
-  return await fetchSpotify(accessToken, "/users/" + userId)
+  return allItems
 }
 
 export async function fetchSpotify<T>(accessToken: string, path: string, params?: Params): Promise<T> {
@@ -74,7 +64,10 @@ async function fetchSpotifyRaw<T>(accessToken: string, url: string): Promise<T> 
     if (json.error.status === 401) {
       throw new Error(SPOTIFY_AUTH_ERROR + ": " + JSON.stringify(json.error))
     } else if (json.error.status === 429) {
+      // 429 = rate limit exceeded, see: https://developer.spotify.com/documentation/web-api/concepts/rate-limits
+      // 'Retry-After' header is provided in seconds.
       console.warn("Rate limit exceeded, retrying in " + result.headers.get("retry-after") + " seconds")
+      
       const retryAfterSeconds: number = parseInt(result.headers.get("retry-after") as string)
       return new Promise((resolve) => {
         setTimeout(() => {

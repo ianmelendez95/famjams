@@ -1,18 +1,20 @@
 import {fetchUserTracks} from "@/famjams/tracks";
 import {
-    fetchAllCurrentUserPlaylists, fetchSpotify,
-    fetchUserProfile
+    fetchAllItems, fetchSpotify,
 } from "@/spotify/api";
 import type {Track, UserPlaylist, UserProfile} from "@/spotify/types";
 
 export async function getCurrentUserPlaylists(accessToken: string): Promise<UserPlaylist[]> {
-    return await fetchAllCurrentUserPlaylists(accessToken)
+    return await fetchAllItems(
+        accessToken,
+        await fetchSpotify(accessToken, "/me/playlists", { limit: 50 })
+    )
 }
 
 export async function getUsersToTracks(accessToken: string, playlistId: string): Promise<Map<UserProfile, Track[]>> {
     return new Map(await Promise.all([...(await fetchUserTracks(accessToken, playlistId)).entries()]
         .map(async ([userId, tracks]) => {
-            const profile = await fetchUserProfile(accessToken, userId)
+            const profile = await fetchSpotify(accessToken, "/users/" + userId)
             return ([profile, tracks] as [UserProfile, Track[]])
         })
     ))
