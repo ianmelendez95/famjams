@@ -18,10 +18,13 @@ export async function getUsersToTracks(accessToken: string, playlistId: string):
 }
 
 export async function getMultiContributorPlaylists(accessToken: string): Promise<UserPlaylist[]> {
-    return await filterMultiContributorPlaylists(accessToken, await getCurrentUserPlaylists(accessToken))
-}
-
-export async function filterMultiContributorPlaylists(accessToken: string, playlists: UserPlaylist[]): Promise<UserPlaylist[]> {
+    const playlists: UserPlaylist[] = await fetchAllItems(accessToken, '/me/playlists')
+    
+    // filter by whether they have multiple contributors
+    // in parallel with Promise.all 
+    // TODO - if done sequentially could avoid rate limiting,
+    //        but would need to be done via UI list that populates 
+    //        as they resolve instead of waiting for all to finish
     const assocMultiUser: [UserPlaylist, boolean][] = await Promise.all(
         playlists.map(p => isPlaylistMultiContributor(accessToken, p.id).then(r => [p, r] as [UserPlaylist, boolean]))
     )
