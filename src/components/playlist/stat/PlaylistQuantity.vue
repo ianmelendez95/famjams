@@ -32,7 +32,7 @@ onMounted(() => {
       </p>
     </div>
     <div class="md:flex flex-row items-center justify-center">
-      <div class="flex flex-row justify-center pb-6 pr-6">
+      <div class="flex flex-row justify-center pb-6 md:pr-6">
         <div ref="donutDivRef_count" class="max-w-full w-[320px]"></div>
       </div>
       <div class="p-4 border-slate-400 border-2 rounded-lg text-slate-400">

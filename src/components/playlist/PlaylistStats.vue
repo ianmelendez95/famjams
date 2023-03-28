@@ -29,7 +29,7 @@ const userTrackPop: [UserProfile, number][] = [...userTracks.entries()]
 </script>
 
 <template>
-  <div class="pb-40">
+  <div class="pb-20">
     <PlaylistQuantity :counts="userTrackCounts"/>
   </div>
   <div>
