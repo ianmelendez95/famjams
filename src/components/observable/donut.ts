@@ -12,6 +12,11 @@ interface AvatarInitialsTextData {
     text: string
 }
 
+export function loadDonut(donutDiv: HTMLDivElement, data: DonutChartData[]) {
+    const width = donutDiv.getBoundingClientRect().width
+    donutDiv.append(buildDonut(data, width))
+}
+
 export function prepareUserChartData(userAssoc: [UserProfile, number][]): DonutChartData[] {
     return userAssoc.map(([user, value]) => ({user, value}))
 }
