@@ -40,12 +40,13 @@ export function clearAccessToken() {
  *
  * @param accessToken
  * @param url the url which when called returns ItemsResponse<T>
+ * @param params
  * @see ItemsResponse
  */
-export async function fetchAllItems<T>(accessToken: string, url: string): Promise<T[]> {
+export async function fetchAllItems<T>(accessToken: string, url: string, params?: Params): Promise<T[]> {
   const allItems: T[] = []
 
-  let response: ItemsResponse<T> = await fetchSpotify(accessToken, url, { limit: 50 })
+  let response: ItemsResponse<T> = await fetchSpotify(accessToken, url, { limit: 50, ...params })
   allItems.push(...response.items)
   while (response.next != null) {
     // iterate sequentially instead of using Promise.all with

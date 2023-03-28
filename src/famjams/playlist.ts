@@ -30,12 +30,17 @@ export async function filterMultiContributorPlaylists(accessToken: string, playl
 }
 
 export async function isPlaylistMultiContributor(accessToken: string, playlistId: string): Promise<boolean> {
-    const result: { items: [{ added_by: { id: string } }] } =
-        await fetchSpotify(accessToken, `/playlists/${playlistId}/tracks`, {
+    // TODO - this could avoid looping through all by breaking early 
+    //        (though may not be relevant if most playlists are not multi contributor,
+    //        session cache may be more effective)
+    const result = await fetchAllItems<{ added_by: { id: string } }>(
+        accessToken,
+        `/playlists/${playlistId}/tracks`, {
             fields: "items(added_by.id)"
-        })
+        }
+    )
 
     return new Set(
-        result.items.filter(item => item.added_by.id).map(item => item.added_by.id)
+        result.filter(item => item.added_by.id).map(item => item.added_by.id)
     ).size > 1
 }
