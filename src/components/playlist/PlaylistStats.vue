@@ -45,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col items-center pb-40">
     <div class="pb-4">
       <h1 class="font-bold text-5xl text-center text-slate-300 pb-4">
         {{ t('playlistStats.quantity.title1') }}
@@ -68,7 +68,8 @@ onMounted(() => {
             :class="{
               'text-slate-200': ((i === 0) || (userTrackCounts[i][1] === userTrackCounts[0][1])),
               'text-2xl': ((i === 0) || (userTrackCounts[i][1] === userTrackCounts[0][1]))
-            }">
+            }"
+            :key="user.id">
           <td><div class="pr-4">{{ count }}</div></td>
           <td>{{ user.display_name }}</td>
         </tr>
@@ -89,14 +90,14 @@ onMounted(() => {
     </div>
     <div class="p-4 border-slate-400 border-2 rounded-lg text-slate-400">
       <table>
-        <tr v-for="([user, count], i) in userTrackPop.slice(0, 3)"
+        <tr v-for="([user, avg], i) in userTrackPop.slice(0, 3)"
             class="text-2xl"
             :class="{
               'text-slate-200': ((i === 0) || (userTrackPop[i][1] === userTrackPop[0][1])),
               'text-2xl': ((i === 0) || (userTrackPop[i][1] === userTrackPop[0][1]))
             }"
             :key="user.id">
-          <td><div class="pr-4">{{ count }}</div></td>
+          <td><div class="pr-4">{{ avg.toFixed(2) }}</div></td>
           <td>{{ user.display_name }}</td>
         </tr>
       </table>

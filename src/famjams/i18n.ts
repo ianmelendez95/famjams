@@ -40,8 +40,8 @@ export const messages = {
                 subtitle: "Number of Tracks Contributed"
             },
             popularity: {
-                title: "Popularity",
-                subtitle: "Average Track Popularity"
+                title: "Well... ya Basic",
+                subtitle: "Average Track Popularity (0-100)"
             }
         }
     },
@@ -53,22 +53,22 @@ export const messages = {
             redirecting: "Redirigiendo"
         },
         playlistSelect: {
-            loading: "Descargando Playlists",
+            loading: "Descargando playlists",
             noneFound1: "No se encontraron playlists con múltiples colaboradores.",
             noneFound2: "Comienza un playlist con tus amigos!",
             noneFound3: "(O extraños si estás desesperado)",
         },
         playlistStats: {
-            analyzing: "Analizando Playlist",
+            analyzing: "Analizando playlist",
             quantity: {
                 title1: "Cantidad",
                 title2: "es",
-                title3: "Calidad",
-                subtitle: "Número de Pistas Contribuidas"
+                title3: "calidad",
+                subtitle: "Número de pistas contribuidas"
             },
             popularity: {
-                title: "Popularidad",
-                subtitle: "Popularidad Promedio de la Pista"
+                title: "Pues... eres basico",
+                subtitle: "Popularidad promedio de la pista"
             }
         }
     }
