@@ -3,6 +3,7 @@ import type {UserProfile} from "@/spotify/types";
 import {onMounted, ref} from "vue";
 import {loadDonut, prepareUserChartData} from "@/components/observable/donut";
 import {useI18n} from "vue-i18n";
+import {trimLeaderboard} from "@/famjams/stats";
 
 const props = defineProps<{
   averages: [UserProfile, number][]
@@ -33,14 +34,14 @@ onMounted(() => {
       </div>
       <div class="p-4 border-slate-400 border-2 rounded-lg text-slate-400">
         <table>
-          <tr v-for="([user, avg], i) in props.averages.slice(0, 3)"
+          <tr v-for="([user, avg], i) in trimLeaderboard(props.averages)"
               class="text-2xl"
               :class="{
               'text-slate-200': ((i === 0) || (props.averages[i][1] === props.averages[0][1])),
               'text-2xl': ((i === 0) || (props.averages[i][1] === props.averages[0][1]))
             }"
               :key="user.id">
-            <td><div class="pr-4">{{ avg.toFixed(2) }}</div></td>
+            <td><div class="pr-4">{{ avg.toFixed(1) }}</div></td>
             <td>{{ user.display_name }}</td>
           </tr>
         </table>

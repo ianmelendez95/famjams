@@ -3,6 +3,7 @@ import type {UserProfile} from "@/spotify/types";
 import {onMounted, ref} from "vue";
 import {loadDonut, prepareUserChartData} from "@/components/observable/donut";
 import {useI18n} from "vue-i18n";
+import {trimLeaderboard} from "@/famjams/stats";
 
 const props = defineProps<{
   counts: [UserProfile, number][]
@@ -37,7 +38,7 @@ onMounted(() => {
       </div>
       <div class="p-4 border-slate-400 border-2 rounded-lg text-slate-400">
         <table>
-          <tr v-for="([user, count], i) in props.counts.slice(0, 3)"
+          <tr v-for="([user, count], i) in trimLeaderboard(props.counts)"
               class="text-2xl"
               :class="{
               'text-slate-200': ((i === 0) || (props.counts[i][1] === props.counts[0][1])),
