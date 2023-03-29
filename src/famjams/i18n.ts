@@ -34,9 +34,7 @@ export const messages = {
         playlistStats: {
             analyzing: "Analyzing Playlist",
             quantity: {
-                title1: "Quantity",
-                title2: "is",
-                title3: "Quality",
+                title: "Quantity is Quality",
                 subtitle: "Number of Tracks Contributed"
             },
             popularity: {
@@ -61,9 +59,7 @@ export const messages = {
         playlistStats: {
             analyzing: "Analizando playlist",
             quantity: {
-                title1: "Cantidad",
-                title2: "es",
-                title3: "calidad",
+                title: "Cantidad es calidad",
                 subtitle: "Número de pistas contribuidas"
             },
             popularity: {

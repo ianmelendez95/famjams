@@ -5,11 +5,12 @@ import {getUsersToTracks} from "@/famjams/playlist";
 import {useRoute, useRouter} from "vue-router";
 import {getAccessToken} from "@/spotify/api";
 import {applySecond, compareSecondNum} from "@/famjams/util";
-import PlaylistQuantity from "@/components/playlist/stat/PlaylistQuantity.vue";
-import PlaylistPopularity from "@/components/playlist/stat/PlaylistPopularity.vue";
+import {useI18n} from "vue-i18n";
+import PlaylistStatTemplate from "@/components/playlist/stat/PlaylistStatTemplate.vue";
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 const accessToken = getAccessToken()
 if (accessToken == null) {
@@ -30,9 +31,14 @@ const userTrackPop: [UserProfile, number][] = [...userTracks.entries()]
 
 <template>
   <div class="pb-20">
-    <PlaylistQuantity :counts="userTrackCounts"/>
+    <PlaylistStatTemplate :title="t('playlistStats.quantity.title')"
+                          :subtitle="t('playlistStats.quantity.subtitle')"
+                          :values="userTrackCounts"/>
   </div>
   <div>
-    <PlaylistPopularity :averages="userTrackPop"/>
+    <PlaylistStatTemplate :title="t('playlistStats.popularity.title')"
+                          :subtitle="t('playlistStats.popularity.subtitle')"
+                          :values="userTrackPop"
+                          :show-value="v => v.toFixed(1)"/>
   </div>
 </template>
