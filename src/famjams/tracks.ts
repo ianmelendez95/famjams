@@ -18,3 +18,9 @@ export async function fetchUserTracks(accessToken: string, playlistId: string): 
 
     return map
 }
+
+export function getTrackReleaseYear(track: Track): number {
+    const pattern = /^(?<year>\d+)(-[-0-9]+)?$/
+    const match = track.track.album.release_date.match(pattern) as RegExpMatchArray
+    return parseInt(match.groups!.year)
+}

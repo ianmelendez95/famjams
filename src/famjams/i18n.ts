@@ -40,6 +40,10 @@ export const messages = {
             popularity: {
                 title: "Well... ya Basic",
                 subtitle: "Average Track Popularity (0-100)"
+            },
+            year: {
+                title: "Old Soul... or Old Fart",
+                subtitle: "Average Track Release Date"
             }
         }
     },
@@ -65,6 +69,10 @@ export const messages = {
             popularity: {
                 title: "Pues... eres del montón",
                 subtitle: "Popularidad promedio de la pista"
+            },
+            year: {
+                title: "Ya te comiste tu cocol?",
+                subtitle: "Fecha promedio de lanzamiento"
             }
         }
     }

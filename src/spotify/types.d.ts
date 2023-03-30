@@ -26,6 +26,9 @@ export interface Track {
     },
     name: string,
     track: {
+        album: {
+            release_date: string
+        },
         popularity: number
     }
 }

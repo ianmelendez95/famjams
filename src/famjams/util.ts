@@ -9,6 +9,10 @@ export function clearDivBody(divEl: HTMLDivElement) {
     }
 }
 
+export function reversed<S>(comp: (x: S, y: S) => number): (x: S, y: S) => number {
+    return (x, y) => comp(y, x)
+}
+
 /**
  * Helper method for comparing associative arrays.
  * 
@@ -25,4 +29,8 @@ export function compareSecondNum([_1, v1]: [any, number], [_2, v2]: [any, number
  */
 export function applySecond<S,T>(func: (x: S) => T): ((p: [any, S]) => [any, T]) {
     return ([x1, x2]) => [x1, func(x2)]
+}
+
+export function averageBy<S>(array: S[], byFunction: (item: S) => number): number {
+    return array.reduce((acc, x) => acc + byFunction(x), 0) / array.length
 }
