@@ -8,7 +8,12 @@ const props = defineProps<{
   values: [UserProfile, number][],
   title: string,
   subtitle: string,
-  showValue?: (v: number) => string
+  
+  /**
+   * The values to show in the leaderboard.
+   * If undefined, will simply show the values themselves.
+   */
+  leaderboardValues?: any[],
 }>()
 
 let donutDivRef = ref<HTMLDivElement | null>(null)
@@ -41,7 +46,7 @@ onMounted(() => {
               'text-2xl': ((i === 0) || (props.values[i][1] === props.values[0][1]))
             }"
               :key="user.id">
-            <td><div class="pr-4">{{ showValue ? showValue(value) : value }}</div></td>
+            <td><div class="pr-4">{{ props.leaderboardValues ? props.leaderboardValues[i] : value }}</div></td>
             <td>{{ user.display_name }}</td>
           </tr>
         </table>

@@ -9,6 +9,11 @@ export function clearDivBody(divEl: HTMLDivElement) {
     }
 }
 
+export function reverseSecond<S,T>(assoc: [S, T][]): [S, T][] {
+    const end = assoc.length - 1
+    return assoc.map(([k, _], i) => [k, assoc[end - i][1]])
+}
+
 export function reversed<S>(comp: (x: S, y: S) => number): (x: S, y: S) => number {
     return (x, y) => comp(y, x)
 }
@@ -20,6 +25,14 @@ export function reversed<S>(comp: (x: S, y: S) => number): (x: S, y: S) => numbe
  */
 export function compareSecondNum([_1, v1]: [any, number], [_2, v2]: [any, number]): number {
     return v2 - v1
+}
+
+export function second<S>([_, y]: [unknown, S]): S {
+    return y
+}
+
+export function secondBy<S,T>(byFunction: (y: S) => T): ([_1, y]: [unknown, S]) => T {
+    return ([_1, y]) => byFunction(y)
 }
 
 /**

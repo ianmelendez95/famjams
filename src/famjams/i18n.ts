@@ -71,7 +71,7 @@ export const messages = {
                 subtitle: "Popularidad promedio de la pista"
             },
             year: {
-                title: "Ya te comiste tu cocol?",
+                title: "Quieres tu cocol?",
                 subtitle: "Fecha promedio de lanzamiento"
             }
         }
