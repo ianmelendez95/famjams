@@ -29,6 +29,7 @@ export interface Track {
         album: {
             release_date: string
         },
+        explicit?: boolean,
         popularity: number
     }
 }

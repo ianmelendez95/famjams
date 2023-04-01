@@ -42,8 +42,12 @@ export const messages = {
                 subtitle: "Average Track Popularity (0-100)"
             },
             year: {
-                title: "Old Soul... or Old Fart",
+                title: "Fell Off Your Dinosaur?",
                 subtitle: "Average Track Release Date"
+            },
+            explicit: {
+                title: "Mouth, Meet Soap",
+                subtitle: "Number of explicit tracks"
             }
         }
     },
@@ -73,6 +77,10 @@ export const messages = {
             year: {
                 title: "Quieres tu cocol?",
                 subtitle: "Fecha promedio de lanzamiento"
+            },
+            explicit: {
+                title: "Huerco maleducado",
+                subtitle: "Número de pistas explícitas"
             }
         }
     }

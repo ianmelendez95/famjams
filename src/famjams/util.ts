@@ -47,3 +47,7 @@ export function applySecond<S,T>(func: (x: S) => T): ((p: [any, S]) => [any, T])
 export function averageBy<S>(array: S[], byFunction: (item: S) => number): number {
     return array.reduce((acc, x) => acc + byFunction(x), 0) / array.length
 }
+
+export function traverse<S,T>(mapFunction: (x: S) => T): (xs: S[]) => T[] {
+    return xs => xs.map(mapFunction)
+}
