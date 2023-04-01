@@ -1,10 +1,10 @@
-import type {Track} from "@/spotify/types";
+import type {PlaylistTrack} from "@/spotify/types";
 import {fetchAllItems} from "@/spotify/api";
 
-export async function fetchUserTracks(accessToken: string, playlistId: string): Promise<Map<string, Track[]>> {
-    const map: Map<string, Track[]> = new Map()
+export async function fetchUserTracks(accessToken: string, playlistId: string): Promise<Map<string, PlaylistTrack[]>> {
+    const map: Map<string, PlaylistTrack[]> = new Map()
 
-    const tracks: Track[] = await fetchAllItems<Track>(accessToken, `/playlists/${playlistId}/tracks`)
+    const tracks: PlaylistTrack[] = await fetchAllItems<PlaylistTrack>(accessToken, `/playlists/${playlistId}/tracks`)
 
     // associate the users to the songs they added to the playlist
     for (const track of tracks) {
@@ -19,7 +19,7 @@ export async function fetchUserTracks(accessToken: string, playlistId: string): 
     return map
 }
 
-export function getTrackReleaseYear(track: Track): number {
+export function getTrackReleaseYear(track: PlaylistTrack): number {
     const pattern = /^(?<year>\d+)(-[-0-9]+)?$/
     const match = track.track.album.release_date.match(pattern) as RegExpMatchArray
     return parseInt(match.groups!.year)

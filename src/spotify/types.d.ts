@@ -6,7 +6,7 @@ export interface ItemsResponse<T> {
 /**
  * The 'playlist report' for a given user
  */
-export interface UserPlaylist {
+export interface Playlist {
     id: string,
     collaborative: boolean,
     images: Image[],
@@ -20,7 +20,7 @@ export interface UserPlaylist {
     }
 }
 
-export interface Track {
+export interface PlaylistTrack {
     added_by: {
         id: '12139552232'
     },
@@ -31,7 +31,11 @@ export interface Track {
         },
         explicit?: boolean,
         popularity: number
-    }
+    },
+    artists: {
+        href: string,
+        id: string
+    }[]
 }
 
 export interface UserProfile {

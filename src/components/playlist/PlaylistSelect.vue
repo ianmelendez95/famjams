@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
-import type {UserPlaylist} from "@/spotify/types";
+import type {Playlist} from "@/spotify/types";
 import {getMultiContributorPlaylists} from "@/famjams/playlist";
 import {getAccessToken} from "@/spotify/api";
 import {useI18n} from "vue-i18n";
@@ -10,7 +10,7 @@ const { t } = useI18n()
 
 const accessToken = getAccessToken()
 
-const playlists: UserPlaylist[] = await getMultiContributorPlaylists(accessToken)
+const playlists: Playlist[] = await getMultiContributorPlaylists(accessToken)
 
 if (playlists.length == 1) {
   // if only one playlist available, send to that playlist

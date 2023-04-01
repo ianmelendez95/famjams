@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // import type {UserProfile} from '@/spotify/types'
-import type {Track, UserProfile} from "@/spotify/types";
+import type {PlaylistTrack, UserProfile} from "@/spotify/types";
 import {getUsersToTracks} from "@/famjams/playlist";
 import {useRoute, useRouter} from "vue-router";
 import {getAccessToken} from "@/spotify/api";
@@ -19,7 +19,7 @@ if (accessToken == null) {
   router.push("/")
 }
 
-const userTracks: Map<UserProfile, Track[]> = await getUsersToTracks(accessToken, route.params.id as string)
+const userTracks: Map<UserProfile, PlaylistTrack[]> = await getUsersToTracks(accessToken, route.params.id as string)
 
 const userTrackCounts: [UserProfile, number][] = [...userTracks.entries()]
     .map(applySecond(ts => ts.length))
