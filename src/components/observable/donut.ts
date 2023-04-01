@@ -50,8 +50,6 @@ export function buildDonut(data: DonutChartData[],
         }
     })
 
-    const imageWidths = calcImageWidths(outerRadius - innerRadius, V)
-
     // Unique the names.
     const names = new d3.InternSet(N) as Set<string>;
 
@@ -63,6 +61,8 @@ export function buildDonut(data: DonutChartData[],
     const arcs = d3.pie().padAngle(padAngle).sort(null).value((i) => V[i as number])(I) as PieArcDatum<number>[];
     const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius).cornerRadius(5) as Arc<any, DefaultArcObject>;
     const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
+    
+    const imageWidths = calcImageWidths(innerRadius, outerRadius, arcs, V)
 
     const svg = d3.create("svg")
         .attr("width", width)
@@ -132,16 +132,33 @@ function parseInitials(string: string): string {
         .join('')                                 // join together
 }
 
-function calcImageWidths(arcWidth: number, values: number[]): number[] {
+function calcImageWidths(innerRadius: number, outerRadius: number, arcAngles: PieArcDatum<number>[], values: number[]): number[] {
+    const arcWidth = outerRadius - innerRadius
     const [min, max] = d3.extent(values) as [number, number]
     const props = values.map(v => (v - min) / (max - min))  // proportion to min, max
 
-    return props.map(p => arcWidth * ((p * 0.45) + 0.50))
+    const initialWidths = props.map(p => arcWidth * ((p * 0.45) + 0.50))
+    
+    // Now we need to limit the size to the actual pie arc width available.
+    // We approximate arc width by multiplying the angle with the radians,
+    // and use it as a maximum.
+    return initialWidths.map((w, i) => Math.min(w, approximateArcWidth(innerRadius, arcAngles[i])))
+}
 
-    // theta / 2*pi
-    // const angleRatio = (arc.endAngle - arc.startAngle) / (2 * Math.PI)
-    // const imageProportion = 0.25 + (0.70 * (1 + Math.log(angleRatio)))
-    // return arcWidth * imageProportion
+/**
+ * Uses law of cosines to identify the approximate width of the arc by 
+ * identifying the distance between the corner midpoints.
+ */
+function approximateArcWidth(innerRadius: number, angle: PieArcDatum<number>): number {
+    const angleRadians = angle.endAngle - angle.startAngle
+    
+    // c^2 = a^2 + b^2 - 2ab*cos(theta)
+    // a = b => c^2 = a^2 + a^2 - 2aa*cos(theta)
+    // c^2 = 2a^2 - 2a^2*cos(theta)
+    // c^2 = 2a^2 - 2a^2*cos(theta)
+    // c^2 = 2a^2(1 - cos(theta))
+    // c = sqrt(2a^2(1 - cos(theta)))
+    return Math.sqrt(2 * Math.pow(innerRadius, 2) * (1 - Math.cos(angleRadians))) - 4
 }
 
 function imageTransform(width: number, [centerX, centerY]: [number, number]): [number, number] {
