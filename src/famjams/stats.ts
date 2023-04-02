@@ -1,4 +1,6 @@
 import {applySecond} from "@/famjams/util";
+import type {PlaylistTrack, PlaylistTrackArtist} from "@/spotify/types";
+import {max} from "d3";
 
 /**
  * @param stats the list of stats to show. 
@@ -32,4 +34,29 @@ export function relativizeToMinimum<T>(stats: [T, number][]): [T, number][] {
     const newMin = Math.floor(min - (0.25 * (max - min)))
     
     return stats.map(applySecond(v => v - newMin))
+}
+
+export function countMaxArtistTrackCount(tracks: PlaylistTrack[]): [PlaylistTrackArtist, number] {
+    const artistsById = new Map()
+    const countsById = new Map()
+    for (const t of tracks) {
+        for (const a of t.track.artists) {
+            artistsById.set(a.id, a)
+            if (countsById.has(a.id)) {
+                countsById.set(a.id, countsById.get(a.id) + 1)
+            } else {
+                countsById.set(a.id, 1)
+            }
+        }
+    }
+    
+    let maxId = null
+    let maxCount = Number.MIN_SAFE_INTEGER
+    for (const [id, count] of countsById.entries()) {
+        if (count > maxCount) {
+            maxId = id
+            maxCount = count
+        }
+    }
+    return [artistsById.get(maxId), maxCount]
 }

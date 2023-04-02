@@ -1,14 +1,23 @@
 <script setup lang="ts">
 // import type {UserProfile} from '@/spotify/types'
-import type {PlaylistTrack, UserProfile} from "@/spotify/types";
+import type {PlaylistTrack, PlaylistTrackArtist, UserProfile} from "@/spotify/types";
 import {getUsersToTracks} from "@/famjams/playlist";
 import {useRoute, useRouter} from "vue-router";
 import {getAccessToken} from "@/spotify/api";
-import {applySecond, averageBy, compareSecondNum, reversed, reverseSecond, second, secondBy, traverse} from "@/famjams/util";
+import {
+  applySecond,
+  averageBy,
+  compareNum, compareSecondBy,
+  reversed,
+  reverseSecond,
+  second,
+  secondBy,
+  traverse
+} from "@/famjams/util";
 import {useI18n} from "vue-i18n";
 import PlaylistStatTemplate from "@/components/playlist/stat/PlaylistStatTemplate.vue";
 import {getTrackReleaseYear} from "@/famjams/tracks";
-import {relativizeToMinimum} from "@/famjams/stats";
+import {countMaxArtistTrackCount, relativizeToMinimum} from "@/famjams/stats";
 
 const router = useRouter()
 const route = useRoute()
@@ -23,19 +32,24 @@ const userTracks: Map<UserProfile, PlaylistTrack[]> = await getUsersToTracks(acc
 
 const userTrackCounts: [UserProfile, number][] = [...userTracks.entries()]
     .map(applySecond(ts => ts.length))
-    .sort(compareSecondNum)
+    .sort(compareSecondBy(compareNum))
 
 const userTrackPop: [UserProfile, number][] = [...userTracks.entries()]
     .map(applySecond(tracks => averageBy(tracks, t => t.track.popularity)))
-    .sort(compareSecondNum)
+    .sort(compareSecondBy(compareNum))
 
 const userTrackDates: [UserProfile, number][] = [...userTracks.entries()]
     .map(applySecond(tracks => Math.floor(averageBy(tracks, getTrackReleaseYear))))
-    .sort(reversed(compareSecondNum))
+    .sort(reversed(compareSecondBy(compareNum)))
 
 const userTrackExplicitCounts: [UserProfile, number][] = [...userTracks.entries()]
     .map(applySecond(tracks => tracks.filter(t => t.track.explicit).length))
-    .sort(compareSecondNum)
+    .sort(compareSecondBy(compareNum))
+
+// TODO - don't do total artists, do the artist with the most tracks
+const userTrackArtists: [UserProfile, [PlaylistTrackArtist, number]][] = [...userTracks.entries()]
+    .map(applySecond(countMaxArtistTrackCount))
+    .sort(compareSecondBy(compareSecondBy(compareNum)))
 </script>
 
 <template>
@@ -67,6 +81,13 @@ const userTrackExplicitCounts: [UserProfile, number][] = [...userTracks.entries(
                           :subtitle="t('playlistStats.explicit.subtitle')"
                           :values="relativizeToMinimum(userTrackExplicitCounts)"
                           :leaderboard-values="userTrackExplicitCounts.map(second)"
+    />
+  </div>
+  <div class="pb-20">
+    <PlaylistStatTemplate :title="t('playlistStats.artist.title')"
+                          :subtitle="t('playlistStats.artist.subtitle')"
+                          :values="relativizeToMinimum(userTrackArtists.map(applySecond(second)))"
+                          :leaderboard-values="userTrackArtists.map(secondBy(second))"
     />
   </div>
 </template>

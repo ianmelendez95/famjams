@@ -29,13 +29,16 @@ export interface PlaylistTrack {
         album: {
             release_date: string
         },
+        artists: PlaylistTrackArtist[]
         explicit?: boolean,
         popularity: number
     },
-    artists: {
-        href: string,
-        id: string
-    }[]
+}
+
+export interface PlaylistTrackArtist {
+    href: string,
+    id: string,
+    name
 }
 
 export interface UserProfile {

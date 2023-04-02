@@ -18,12 +18,11 @@ export function reversed<S>(comp: (x: S, y: S) => number): (x: S, y: S) => numbe
     return (x, y) => comp(y, x)
 }
 
-/**
- * Helper method for comparing associative arrays.
- * 
- * [['a',2],['b',1]].sort(compareSecondNum) => [['b', 1],['a', 2]]
- */
-export function compareSecondNum([_1, v1]: [any, number], [_2, v2]: [any, number]): number {
+export function compareSecondBy<S>(compareFunction: (v1: S, v2: S) => number): ([_1, v1]: [unknown, S], [_2, v2]: [unknown, S]) => number {
+    return ([_1, v1], [_2, v2]) => compareFunction(v1, v2)
+}
+
+export function compareNum(v1: number, v2: number): number {
     return v2 - v1
 }
 
