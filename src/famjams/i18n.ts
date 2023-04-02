@@ -48,6 +48,10 @@ export const messages = {
             explicit: {
                 title: "Mouth, Meet Soap",
                 subtitle: "Number of explicit tracks"
+            },
+            artist: {
+                title: "Loyal... or Maybe Boring",
+                subtitle: "Number of Tracks by the Same Artist"
             }
         }
     },
@@ -81,6 +85,10 @@ export const messages = {
             explicit: {
                 title: "Huerco maleducado",
                 subtitle: "Número de pistas explícitas"
+            },
+            artist: {
+                title: "Leal... o tal vez aburrido",
+                subtitle: "Número de pistas del mismo artista"
             }
         }
     }
