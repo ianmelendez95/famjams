@@ -26,8 +26,16 @@ export function compareNum(v1: number, v2: number): number {
     return v2 - v1
 }
 
+export function first<S>([x, _]: [S, unknown]): S {
+    return x
+}
+
 export function second<S>([_, y]: [unknown, S]): S {
     return y
+}
+
+export function firstBy<S,T>(byFunction: (x: S) => T): ([x, _]: [S, unknown]) => T {
+    return ([x, _]) => byFunction(x)
 }
 
 export function secondBy<S,T>(byFunction: (y: S) => T): ([_1, y]: [unknown, S]) => T {
@@ -49,4 +57,12 @@ export function averageBy<S>(array: S[], byFunction: (item: S) => number): numbe
 
 export function traverse<S,T>(mapFunction: (x: S) => T): (xs: S[]) => T[] {
     return xs => xs.map(mapFunction)
+}
+
+/**
+ * NOTE: Uniqueness identified by 'SameValueZero' ECMA algorithm: https://tc39.es/ecma262/#sec-samevaluezero
+ * @see https://tc39.es/ecma262/#sec-samevaluezero
+ */
+export function unique<S>(xs: S[]): S[] {
+    return [...new Set(xs).values()]
 }

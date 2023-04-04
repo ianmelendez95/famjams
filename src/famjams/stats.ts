@@ -1,6 +1,10 @@
 import {applySecond} from "@/famjams/util";
 import type {PlaylistTrack, PlaylistTrackArtist} from "@/spotify/types";
-import {max} from "d3";
+import {fetchArtistsByIds} from "@/famjams/artist";
+
+export function onLargeScreen() {
+    return window.matchMedia('(min-width: 768px)').matches
+}
 
 /**
  * @param stats the list of stats to show. 
@@ -8,7 +12,7 @@ import {max} from "d3";
  *              just the number of rows.
  */
 export function trimLeaderboard<T>(stats: T[]): T[] {
-    if (window.matchMedia('(min-width: 768px)').matches) {
+    if (onLargeScreen()) {
         return stats
     } else {
         return stats.slice(0, 3)
@@ -59,4 +63,10 @@ export function countMaxArtistTrackCount(tracks: PlaylistTrack[]): [PlaylistTrac
         }
     }
     return [artistsById.get(maxId), maxCount]
+}
+
+export async function fetchPlaylistArtistImages(accessToken: string, playlistArtists: PlaylistTrackArtist[]): Promise<string[]> {
+    const artists = await fetchArtistsByIds(accessToken, playlistArtists.map(a => a.id))
+    const imagesById = new Map(artists.map(a => [a.id, a.images[0].url]))
+    return playlistArtists.map(a => imagesById.get(a.id) as string)
 }

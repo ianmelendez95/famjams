@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type {UserProfile} from "@/spotify/types";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {loadDonut, prepareUserChartData} from "@/components/observable/donut";
-import {trimLeaderboard} from "@/famjams/stats";
+import {onLargeScreen, trimLeaderboard} from "@/famjams/stats";
 
 const props = defineProps<{
   values: [UserProfile, number][],
@@ -14,9 +14,16 @@ const props = defineProps<{
    * If undefined, will simply show the values themselves.
    */
   leaderboardValues?: any[],
+  
+  leaderboardMiscImages?: string[],
+  leaderboardMiscText?: string[]
 }>()
 
 let donutDivRef = ref<HTMLDivElement | null>(null)
+
+const showLeaderboardMisc = computed(() => 
+    onLargeScreen() && props.leaderboardMiscImages && props.leaderboardMiscText
+)
 
 onMounted(() => {
   loadDonut(donutDivRef.value!, prepareUserChartData(props.values))
@@ -48,6 +55,10 @@ onMounted(() => {
               :key="user.id">
             <td><div class="pr-4">{{ props.leaderboardValues ? props.leaderboardValues[i] : value }}</div></td>
             <td>{{ user.display_name }}</td>
+            <td v-if="showLeaderboardMisc">
+              <img :src="props.leaderboardMiscImages[i]" class="w-8 ml-4 mr-4" alt="[leaderboard image]"/>
+            </td>
+            <td v-if="showLeaderboardMisc">{{ props.leaderboardMiscText[i] }}</td>
           </tr>
         </table>
       </div>

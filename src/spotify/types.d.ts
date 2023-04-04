@@ -41,6 +41,12 @@ export interface PlaylistTrackArtist {
     name
 }
 
+export interface Artist {
+    href: string,
+    id: string,
+    images: Image[]
+}
+
 export interface UserProfile {
     id: string,
     display_name: string,

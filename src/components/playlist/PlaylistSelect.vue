@@ -42,7 +42,7 @@ function trimLength(string: string, maxLength: number): string {
          @click="selectPlaylist(playlist.id)"
          class="flex flex-row p-4 cursor-pointer">
       <div class="inline-block pr-4">
-        <img v-if="playlist.images[0]" v-bind:src="playlist.images[0].url" class="w-16" alt="[Playlist Image]"/>
+        <img v-if="playlist.images[0]" :src="playlist.images[0].url" class="w-16" alt="[Playlist Image]"/>
       </div>
       <div class="inline-block flex flex-col">
         <div class="text-2xl text-slate-50 inline-block">{{ trimLength(playlist.name, 30) }}</div>

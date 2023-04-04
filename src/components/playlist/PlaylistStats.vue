@@ -7,7 +7,7 @@ import {getAccessToken} from "@/spotify/api";
 import {
   applySecond,
   averageBy,
-  compareNum, compareSecondBy,
+  compareNum, compareSecondBy, first, firstBy,
   reversed,
   reverseSecond,
   second,
@@ -17,7 +17,8 @@ import {
 import {useI18n} from "vue-i18n";
 import PlaylistStatTemplate from "@/components/playlist/stat/PlaylistStatTemplate.vue";
 import {getTrackReleaseYear} from "@/famjams/tracks";
-import {countMaxArtistTrackCount, relativizeToMinimum} from "@/famjams/stats";
+import {countMaxArtistTrackCount, fetchPlaylistArtistImages, relativizeToMinimum} from "@/famjams/stats";
+import {onMounted} from "vue";
 
 const router = useRouter()
 const route = useRoute()
@@ -46,10 +47,18 @@ const userTrackExplicitCounts: [UserProfile, number][] = [...userTracks.entries(
     .map(applySecond(tracks => tracks.filter(t => t.track.explicit).length))
     .sort(compareSecondBy(compareNum))
 
-// TODO - don't do total artists, do the artist with the most tracks
+// TODO - get the artist images to show in the leaderboard
 const userTrackArtists: [UserProfile, [PlaylistTrackArtist, number]][] = [...userTracks.entries()]
     .map(applySecond(countMaxArtistTrackCount))
     .sort(compareSecondBy(compareSecondBy(compareNum)))
+const userTrackArtistNames: string[] = userTrackArtists.map(secondBy(firstBy(a => a.name)))
+const userTrackArtistImages: string[] = await fetchPlaylistArtistImages(accessToken, userTrackArtists.map(secondBy(first)))
+
+onMounted(() => {
+  userTrackArtists.forEach(([u, [a, c]]) => {
+    console.log(u.display_name, a.name, c)
+  })
+})
 </script>
 
 <template>
@@ -88,6 +97,8 @@ const userTrackArtists: [UserProfile, [PlaylistTrackArtist, number]][] = [...use
                           :subtitle="t('playlistStats.artist.subtitle')"
                           :values="relativizeToMinimum(userTrackArtists.map(applySecond(second)))"
                           :leaderboard-values="userTrackArtists.map(secondBy(second))"
+                          :leaderboard-misc-images="userTrackArtistImages"
+                          :leaderboard-misc-text="userTrackArtistNames"
     />
   </div>
 </template>
