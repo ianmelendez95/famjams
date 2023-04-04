@@ -1,32 +1,22 @@
 <script lang="ts" setup>
-import type {UserProfile} from "@/spotify/types";
-import {computed, onMounted, ref} from "vue";
-import {loadDonut, prepareUserChartData} from "@/components/observable/donut";
+import {onMounted, ref} from "vue";
+import {loadDonut} from "@/components/observable/donut";
 import {onLargeScreen, trimLeaderboard} from "@/famjams/stats";
+import type {UserValue} from '@/famjams/stats'
 
 const props = defineProps<{
-  values: [UserProfile, number][],
   title: string,
   subtitle: string,
   
-  /**
-   * The values to show in the leaderboard.
-   * If undefined, will simply show the values themselves.
-   */
-  leaderboardValues?: any[],
-  
-  leaderboardMiscImages?: string[],
-  leaderboardMiscText?: string[]
+  values: UserValue[]
 }>()
 
 let donutDivRef = ref<HTMLDivElement | null>(null)
 
-const showLeaderboardMisc = computed(() => 
-    onLargeScreen() && props.leaderboardMiscImages && props.leaderboardMiscText
-)
+const largeScreen = onLargeScreen()
 
 onMounted(() => {
-  loadDonut(donutDivRef.value!, prepareUserChartData(props.values))
+  loadDonut(donutDivRef.value!, props.values)
 })
 </script>
 
@@ -46,19 +36,19 @@ onMounted(() => {
       </div>
       <div class="p-4 border-slate-400 border-2 rounded-lg text-slate-400">
         <table>
-          <tr v-for="([user, value], i) in trimLeaderboard(props.values)"
+          <tr v-for="(userValue, i) in trimLeaderboard(props.values)"
               class="text-2xl"
               :class="{
-              'text-slate-200': ((i === 0) || (props.values[i][1] === props.values[0][1])),
-              'text-2xl': ((i === 0) || (props.values[i][1] === props.values[0][1]))
-            }"
-              :key="user.id">
-            <td><div class="pr-4">{{ props.leaderboardValues ? props.leaderboardValues[i] : value }}</div></td>
-            <td>{{ user.display_name }}</td>
-            <td v-if="showLeaderboardMisc">
-              <img :src="props.leaderboardMiscImages[i]" class="w-8 ml-4 mr-4" alt="[leaderboard image]"/>
+                  'text-slate-200': ((i === 0) || (props.values[i][1] === props.values[0][1])),
+                  'text-2xl': ((i === 0) || (props.values[i][1] === props.values[0][1]))
+              }"
+              :key="userValue.user.id">
+            <td><div class="pr-4">{{ userValue.displayValue ? userValue.displayValue : userValue.value }}</div></td>
+            <td>{{ userValue.user.display_name }}</td>
+            <td v-if="largeScreen && userValue.image">
+              <img :src="userValue.image" class="w-8 ml-4 mr-4" alt="[leaderboard image]"/>
             </td>
-            <td v-if="showLeaderboardMisc">{{ props.leaderboardMiscText[i] }}</td>
+            <td v-if="largeScreen && userValue.miscText">{{ userValue.miscText }}</td>
           </tr>
         </table>
       </div>

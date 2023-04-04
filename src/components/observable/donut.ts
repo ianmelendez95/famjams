@@ -17,16 +17,15 @@ export function loadDonut(donutDiv: HTMLDivElement, data: DonutChartData[]) {
     donutDiv.append(buildDonut(data, width))
 }
 
-export function prepareUserChartData(userAssoc: [UserProfile, number][]): DonutChartData[] {
-    return userAssoc.map(([user, value]) => ({user, value}))
-}
-
 export function buildDonut(data: DonutChartData[],
                            width: number): SVGSVGElement {
     // This is modified and extended work from Observable example.
     // Copyright 2021 Observable, Inc.
     // Released under the ISC license.
     // https://observablehq.com/@d3/donut-chart
+    //
+    // Extended to support Spotify user image urls and
+    // avatar SVG generation (see 'letter avatars' in comments below)
 
     const innerRadius = width / 3 // inner radius of pie, in pixels (non-zero for donut)
     const outerRadius = width / 2 // outer radius of pie, in pixels
