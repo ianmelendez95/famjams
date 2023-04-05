@@ -5,7 +5,6 @@ import {
 import type {PlaylistTrack, Playlist, UserProfile} from "@/spotify/types";
 
 export async function getUsersToTracks(accessToken: string, playlistId: string): Promise<Map<UserProfile, PlaylistTrack[]>> {
-    // TODO - this likely pulls the same user profiles multiple times, optimize to only query once
     return new Map(await Promise.all([...(await fetchUserTracks(accessToken, playlistId)).entries()]
         .map(async ([userId, tracks]) => {
             const profile = await fetchSpotify(accessToken, "/users/" + userId)
