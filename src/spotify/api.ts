@@ -1,6 +1,7 @@
 import type {ItemsResponse} from "@/spotify/types";
 
 export const SPOTIFY_AUTH_ERROR = "SPOTIFY_AUTH_ERROR"
+export const SPOTIFY_BETA_ERROR = "SPOTIFY_BETA_ERROR"
 
 export interface Params {
   [key: string]: any
@@ -71,6 +72,16 @@ async function fetchSpotifyRaw<T>(accessToken: string, url: string): Promise<T> 
   const result = await fetch(url, {
     method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
   });
+  
+  if (result.status === 403) {
+    const error = await result.text()
+    // this text could change, but it's the only way to know what particular 403 issue happened
+    if (error.startsWith("User not registered in the Developer Dashboard")) {
+      throw new Error(SPOTIFY_BETA_ERROR + ": " + result.status + " " + error)
+    } else {
+      throw new Error("UNKNOWN ERROR: " + result.status + " " + error)
+    }
+  }
 
   const json = await result.json();
   if (json.error) {
