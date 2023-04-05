@@ -8,9 +8,26 @@ Get a cheeky report of some selection habits of your friends tracks, like
 reflect on what your friends contributions say about them as a person (just kidding, it's not that deep, but 
 can definitely lead to some fun conversations!)
 
+<p align="center">
+  <img alt="Track Count Image" src="readme/quantity-stat.png" height="300"/>
+</p>
+
+<p align="center">
+  <img alt="Track Date Image" src="readme/date-stat.png" height="300"/>
+</p>
+
+## Spotify API
+
+This application uses the Spotify API (which is exceptional by the way, great work by the Spotify team!)
+to access playlist information.
+
+When first opening the app, you will be redirected to Spotify's authentication portal, where you can 
+allow the app to access playlists and their content.
+
 ## To-Do
 
 - [ ] Identify unregistered user and provide contact information for addition to the beta testing 
+- [ ] Configure client id to be provided at build time
 - [ ] (Long Term) Add first-class support for adding categories with 'plugin' system
 
 ## Project Setup
