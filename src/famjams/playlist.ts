@@ -3,7 +3,7 @@ import {
     fetchAllItems, fetchSpotify,
 } from "@/spotify/api";
 import type {PlaylistTrack, Playlist, UserProfile} from "@/spotify/types";
-import {replaceDemoData} from "../../public/demo";
+import {replaceDemoData} from "@/famjams/demo/demo";
 
 export async function getUsersToTracks(accessToken: string, playlistId: string): Promise<Map<UserProfile, PlaylistTrack[]>> {
     return new Map(await Promise.all([...(await fetchUserTracks(accessToken, playlistId)).entries()]
