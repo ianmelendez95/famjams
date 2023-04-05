@@ -3,11 +3,12 @@ import {
     fetchAllItems, fetchSpotify,
 } from "@/spotify/api";
 import type {PlaylistTrack, Playlist, UserProfile} from "@/spotify/types";
+import {replaceDemoData} from "../../public/demo";
 
 export async function getUsersToTracks(accessToken: string, playlistId: string): Promise<Map<UserProfile, PlaylistTrack[]>> {
     return new Map(await Promise.all([...(await fetchUserTracks(accessToken, playlistId)).entries()]
         .map(async ([userId, tracks]) => {
-            const profile = await fetchSpotify(accessToken, "/users/" + userId)
+            const profile = replaceDemoData(await fetchSpotify(accessToken, "/users/" + userId))
             return ([profile, tracks] as [UserProfile, PlaylistTrack[]])
         })
     ))
