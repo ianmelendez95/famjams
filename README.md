@@ -8,6 +8,14 @@ Get a cheeky report of some selection habits of your friends tracks, like
 reflect on what your friends contributions say about them as a person (just kidding, it's not that deep, but 
 can definitely lead to some fun conversations!)
 
+The app is available to use at 
+* (English) https://www.familyjamz.com
+* (Spanish) https://www.familyjamz.mx
+
+Unfortunately the app is still in 'development' under Spotify, so you would have to email me the email 
+linked to your account and a full name to be added to the development access list.
+(But please don't unless you *really* want to, this is just a toy project for my friends and family!)
+
 <p align="center">
   <img alt="Track Count Image" src="readme/quantity-stat.png" height="300"/>
 </p>
@@ -19,7 +27,7 @@ can definitely lead to some fun conversations!)
 ## Technologies Used
 
 Alright now's the time for honesty, this was more of a learning project that just happened to be 
-a fun vehicle by involving friends and family. 
+a fun app that I could share with others. 
 Now's the part where I go on about the cool stuff contained in this project.
 
 ### Vue 3.x
@@ -40,7 +48,7 @@ idiomatic JS control flow logic. Maybe it's just that good that you never really
 
 ### Vue Suspense
 
-The Vue Suspense component is an interesting way to support async setup in their Composition APIs.
+The Vue [Suspense](https://vuejs.org/guide/built-ins/suspense.html) component is an interesting way to support async setup in their Composition APIs.
 You can find examples of these in the [PlaylistSelectSuspense](/src/components/playlist/PlaylistSelectSuspense.vue)
 template. By simply wrapping the async component with the `<template #default>` and a fallback 
 synchronous component with `<template #fallback>`, you can avoid wrangling with lifecycle methods and 
