@@ -26,9 +26,7 @@ allow the app to access playlists and their content.
 
 ## To-Do
 
-- [ ] Identify unregistered user and provide contact information for addition to the beta testing 
-- [ ] Configure client id to be provided at build time
-- [ ] (Long Term) Add first-class support for adding categories with 'plugin' system
+- (Long Term) Add first-class support for adding categories with 'plugin' system
 
 ## Project Setup
 
