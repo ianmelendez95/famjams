@@ -95,7 +95,7 @@ For this project I started with Observable's excellent [donut chart example](htt
 
 The first modification was to add TypeScript types to it, which was no small matter, since
 it took full advantage of [destructuring assignment default values](https://observablehq.com/@d3/donut-chart)
-AND [default_parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)[default_parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters).
+AND [default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters).
 These were a nightmare to try to add types to, so instead I settled for reducing the arguments entirely 
 to the subset needed for my purposes, and hardcoding the rest.
 
