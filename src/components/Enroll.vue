@@ -1,14 +1,18 @@
+<script setup lang="ts">
+import {useI18n} from "vue-i18n";
+
+const { t } = useI18n()
+</script>
 <template>
   <div>
     <p class="pb-4">
-      Your user has not been added to the development access list.
+      {{ t('enroll.p1') }}
     </p>
     <p class="pb-4">
-      If you're interested in using the app please email ian.melendez.95@gmail.com with your full name and
-      email associated with your Spotify account.
+      {{ t('enroll.p2') }}
     </p>
     <p>
-      (This is really just for friends and family. I just wanted this to sound like generic marketing material because that looks cool.)
+      ({{ t('enroll.p3') }})
     </p>
   </div>
 </template>

@@ -25,6 +25,11 @@ export const messages = {
         callback: {
             redirecting: "Redirecting"
         },
+        enroll: {
+            p1: "Your user has not been added to the development access list.",
+            p2: "If you're interested in using the app please email ian.melendez.95@gmail.com with your full name and email associated with your Spotify account.",
+            p3: "This is really just for friends and family. I just wanted this to sound like generic marketing material because that looks cool."
+        },
         playlistSelect: {
             loading: "Loading Playlists",
             noneFound1: "No playlists with multiple contributors found.",
@@ -61,6 +66,11 @@ export const messages = {
         },
         callback: {
             redirecting: "Redirigiendo"
+        },
+        enroll: {
+            p1: "Su usuario no ha sido agregado a la lista de acceso de desarrollo.",
+            p2: "Si está interesado en usar la aplicación, envíe un correo electrónico a ian.melendez.95@gmail.com con su nombre completo y correo electrónico asociado con su cuenta de Spotify.",
+            p3: "En realidad esto fue solo para amigos y familiares. Solo quería que sonara como material de marketing genérico porque se ve genial."
         },
         playlistSelect: {
             loading: "Descargando playlists",
