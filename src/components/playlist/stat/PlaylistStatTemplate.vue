@@ -39,8 +39,8 @@ onMounted(() => {
           <tr v-for="(userValue, i) in trimLeaderboard(props.values)"
               class="text-2xl"
               :class="{
-                  'text-slate-200': ((i === 0) || (props.values[i][1] === props.values[0][1])),
-                  'text-2xl': ((i === 0) || (props.values[i][1] === props.values[0][1]))
+                  'text-slate-200': ((i === 0) || (props.values[i].value === props.values[0].value)),
+                  'text-2xl': ((i === 0) || (props.values[i].value === props.values[0].value))
               }"
               :key="userValue.user.id">
             <td><div class="pr-4">{{ userValue.displayValue ? userValue.displayValue : userValue.value }}</div></td>
